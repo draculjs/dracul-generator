@@ -2,6 +2,8 @@ const getI18nKey = require('../../utils/getI18nKey')
 const pluralize = require('../../utils/pluralize')
 const capitalize = require('../../utils/capitalize')
 const descapitalize = require('../../utils/descapitalize')
+const filterObjectIdProperties = require('../../utils/filterObjectIdProperties')
+const filterObjectIdListProperties = require('../../utils/filterObjectIdListProperties')
 
 module.exports = function ({model, moduleName}) {
     let content =
@@ -33,15 +35,17 @@ module.exports = function ({model, moduleName}) {
                 @update:items-per-page="fetch"
         >
 
-           <template slot="no-data">
-                <div class="text-xs-center" v-t="'common.noData'"></div>
+            ${refProps(model.properties)}
+            
+            <template slot="no-data">
+               <div class="text-xs-center" v-t="'common.noData'"></div>
             </template>
 
             <template slot="loading">
-                <div   class="text-xs-center" v-t="'common.loading'"></div>
+               <div   class="text-xs-center" v-t="'common.loading'"></div>
             </template>
 
-             <template v-slot:item.action="{ item }">
+            <template v-slot:item.action="{ item }">
                 <show-button  @click="$emit('show', item)" />
                 <edit-button  @click="$emit('update', item)" />
                 <delete-button @click="$emit('delete', item)" />
@@ -124,7 +128,35 @@ module.exports = function ({model, moduleName}) {
 function headers(properties, modelName, moduleName) {
 
     let content = properties.map(field => {
-        return `{text: this.$t('${getI18nKey(moduleName,modelName,field.name, true)}'), value: '${field.name}'}`
+        return `{text: this.$t('${getI18nKey(moduleName, modelName, field.name, true)}'), value: '${field.name}'}`
     }).join(',\n                    ')
+    return content
+}
+
+function refProps(properties){
+    let content = ''
+
+    //Object Id List Props
+    let objIdListProps =  filterObjectIdListProperties(properties)
+
+    content += objIdListProps.map(field => {
+        return `
+         <template v-slot:item.${field.name}="{ item }">
+            {{item.${field.name}.map(e=> e.${field.refDisplayField}).join(", ")}}
+         </template>
+        `
+    }).join('\n ')
+
+    //Object Id Props
+    let objIdProps =  filterObjectIdProperties(properties)
+
+    content += objIdProps.map(field => {
+        return `
+         <template v-slot:item.${field.name}="{ item }">
+            {{ ${field.refDisplayField} }}
+         </template>
+        `
+    }).join('\n ')
+
     return content
 }

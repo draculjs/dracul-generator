@@ -1,7 +1,7 @@
 
 Vue.component('FormProperty', {
     props:{
-        p: {type:Object, default: () => {return {name:'',type:'', ref:'', label:'',icon:'',required:false,search: false, i18n:{en:'',es:'',pt:''} } } }
+        p: {type:Object, default: () => {return {name:'',type:'', ref:'', refDisplayField:'',label:'',icon:'',required:false,search: false, i18n:{en:'',es:'',pt:''} } } }
     },
     created(){
       console.log(this.p)
@@ -14,6 +14,7 @@ Vue.component('FormProperty', {
                 name: this.p.name?this.p.name:'',
                 type: this.p.type?this.p.type:'',
                 ref: this.p.ref?this.p.ref:'',
+                refDisplayField: this.p.refDisplayField?this.p.refDisplayField:'',
                 label: this.p.label?this.p.label:'',
                 icon: this.p.icon?this.p.icon:'',
                 required: this.p.required?this.p.required:false,
@@ -91,6 +92,10 @@ Vue.component('FormProperty', {
     
     <div class="col-12 py-1" v-if="form.type =='ObjectId' || form.type =='ObjectIdList'">
         <input-text  label="Ref" name="ref" v-model="form.ref" :errors="errors"></input-text>
+    </div>
+    
+      <div class="col-12 py-1" v-if="form.type =='ObjectId' || form.type =='ObjectIdList'">
+        <input-text  label="RefDisplayField" name="refDisplayField" v-model="form.refDisplayField" :errors="errors"></input-text>
     </div>
     
     <div class="col-12 py-1">

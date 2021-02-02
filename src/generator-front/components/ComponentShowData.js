@@ -60,6 +60,6 @@ function distribute(properties) {
 function getItems(model, column, moduleName) {
 
     return column.map(field => {
-        return ` <show-field :value="item.${field.name}" :label="$t('${getI18nKey(moduleName,model.name, field.name)}')" icon="${field.icon}"/>`
+        return ` <show-field :value="item.${field.name}" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}')" icon="${field.icon}"/>`
     }).join('\n                ')
 }

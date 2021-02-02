@@ -30,6 +30,7 @@ function retorno(properties){
         if(field.type == 'ObjectId' || field.type == 'ObjectIdList'){
             return `${field.name}{
                 id
+                ${field.refDisplayField}
             }`
         }
 

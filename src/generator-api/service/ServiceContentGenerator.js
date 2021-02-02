@@ -189,7 +189,7 @@ function populate(properties){
 
 function getObjectIdProperties(properties) {
     let propFiltered = properties.filter(field => {
-        if (field.type == 'ObjectId') {
+        if (field.type == 'ObjectId' || field.type == 'ObjectIdList') {
             return true
         }
         return false

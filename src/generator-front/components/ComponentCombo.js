@@ -11,10 +11,10 @@ module.exports = function ({field, model, moduleName}) {
                 ${field.type == 'ObjectIdList' ? 'multiple' : ''}
                 prepend-icon="${field.icon ? field.icon : 'label'}"
                 :items="items"
-                :item-text="'name'"
+                :item-text="'${field.refDisplayField ? field.refDisplayField : 'name'}'"
                 :item-value="'id'"
                 v-model="item"
-                :label="$t('${getI18nKey(moduleName,model.name,field.name)}')"
+                :label="$t('${getI18nKey(moduleName,model.name,field.name,true)}')"
                 :loading="loading"
                 :error="hasInputErrors('${field.name}')"
                 :error-messages="getInputErrors('${field.name}')"
@@ -29,8 +29,8 @@ module.exports = function ({field, model, moduleName}) {
 
     import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
     
-    import ${capitalize(field.ref)}Provider from "../../../providers/${capitalize(field.ref)}Provider"
     
+    ${provider(field)}
 
     export default {
         name: "${capitalize(field.ref)}Combobox",
@@ -60,12 +60,7 @@ module.exports = function ({field, model, moduleName}) {
               return this.$refs.form.validate()
             },
             fetch(){
-                this.loading= true
-                ${capitalize(field.ref)}Provider.fetch${capitalize(pluralize(field.ref))}().then(r => {
-                    this.items = r.data.${descapitalize(field.ref)}Fetch
-                }).catch(err => console.error(err))
-                .finally(()=> this.loading = false)
-              
+               ${fetchFunction(field)}
             }
             
         }
@@ -81,3 +76,27 @@ module.exports = function ({field, model, moduleName}) {
 return content
 }
 
+function provider(field){
+    if(field.ref == 'User'){
+        return `import {userProvider} from "@dracul/user-frontend"`
+    }else{
+        return `import ${capitalize(field.ref)}Provider from "../../../providers/${capitalize(field.ref)}Provider"`
+    }
+}
+
+
+function fetchFunction(field){
+    if(field.ref == 'User'){
+        return `this.loading= true
+              userProvider.users().then(r => {
+                    this.items = r.data.users
+                }).catch(err => console.error(err))
+                .finally(()=> this.loading = false)`
+    }else{
+        return `this.loading= true
+                ${capitalize(field.ref)}Provider.fetch${capitalize(pluralize(field.ref))}().then(r => {
+                    this.items = r.data.${descapitalize(field.ref)}Fetch
+                }).catch(err => console.error(err))
+                .finally(()=> this.loading = false)`
+    }
+}
