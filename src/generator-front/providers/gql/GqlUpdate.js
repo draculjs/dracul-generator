@@ -27,6 +27,8 @@ function variables(properties){
         switch(field.type){
             case 'ObjectId':
                 return `$${field.name}:ID${field.required?'!':''}`
+            case 'ObjectIdList':
+                return `$${field.name}:[ID${field.required?'!':''}]`
             case 'Date':
                 return `$${field.name}:String${field.required?'!':''}`
             default:
@@ -64,7 +66,7 @@ function retorno(properties){
             }`
         }
 
-        if(field.type == 'ObjectId'){
+        if(field.type == 'ObjectId' || field.type == 'ObjectIdList'){
             return `${field.name}{
                 id
             }`

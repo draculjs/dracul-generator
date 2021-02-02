@@ -9,6 +9,8 @@ module.exports = function componentField(field, modelName, moduleName) {
             return generateDateField(field, modelName, moduleName)
         case 'ObjectId':
             return generateComboField(field, modelName, moduleName)
+        case 'ObjectIdList':
+            return generateComboListField(field, modelName, moduleName)
         default:
             return generateTextField(field, modelName, moduleName)
     }
@@ -38,6 +40,15 @@ function generateComboField(field, modelName, moduleName) {
     let content = `
                    <v-col cols="12" sm="6">
                         <${kebabCase(field.ref)}-combobox v-model="form.${field.name}" :input-errors="inputErrors" />
+                   </v-col>    
+`
+    return content
+}
+
+function generateComboListField(field, modelName, moduleName) {
+    let content = `
+                   <v-col cols="12" sm="6">
+                        <${kebabCase(field.ref)}-combobox multiple v-model="form.${field.name}" :input-errors="inputErrors" />
                    </v-col>    
 `
     return content

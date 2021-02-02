@@ -8,7 +8,7 @@ Vue.component('FormProperty', {
     },
     data() {
         return {
-            options: ['String','Int','Float','Date','ObjectId'],
+            options: ['String','Int','Float','Date','ObjectId','ObjectIdList'],
             errors:[],
             form: {
                 name: this.p.name?this.p.name:'',
@@ -61,7 +61,7 @@ Vue.component('FormProperty', {
             }
 
             //Check ref required
-            if(this.form.type == 'ObjectId' && this.form.ref.length == 0){
+            if((this.form.type == 'ObjectId' || this.form.type == 'ObjectIdList') && this.form.ref.length == 0){
                 error = true
                 this.errors.push('ref')
             }else{
@@ -89,7 +89,7 @@ Vue.component('FormProperty', {
         <input-select :options="options" label="type" name="type" v-model="form.type" :errors="errors"></input-select>
     </div>
     
-    <div class="col-12 py-1" v-if="form.type =='ObjectId'">
+    <div class="col-12 py-1" v-if="form.type =='ObjectId' || form.type =='ObjectIdList'">
         <input-text  label="Ref" name="ref" v-model="form.ref" :errors="errors"></input-text>
     </div>
     

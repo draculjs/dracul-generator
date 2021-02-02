@@ -27,7 +27,7 @@ function retorno(properties){
             }`
         }
 
-        if(field.type == 'ObjectId'){
+        if(field.type == 'ObjectId' || field.type == 'ObjectIdList'){
             return `${field.name}{
                 id
             }`

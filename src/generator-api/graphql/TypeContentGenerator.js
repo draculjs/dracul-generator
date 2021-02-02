@@ -77,6 +77,14 @@ function fields(properties, input = false) {
                 }
 
                 return ` ${field.name}: ${field.ref}${field.required ? "!" : ""}`
+            case "ObjectIdList":
+                if (!field.ref) throw new Error("Field " + field.name + "  has ObjectIdList type so needs ref atributte")
+
+                if (input) {
+                    return ` ${field.name}: [ID${field.required ? "!" : ""}]`
+                }
+
+                return ` ${field.name}: [${field.ref}${field.required ? "!" : ""}]`
             case "Date":
                 return ` ${field.name}: String${field.required ? "!" : ""}`
             default:
