@@ -8,6 +8,7 @@ module.exports = function ({field, model, moduleName}) {
 `<template>
     <v-col cols="12" sm="6">
         <v-select
+                ${field.type == 'ObjectIdList' ? 'multiple' : ''}
                 prepend-icon="${field.icon ? field.icon : 'label'}"
                 :items="items"
                 :item-text="'name'"
@@ -32,7 +33,7 @@ module.exports = function ({field, model, moduleName}) {
     
 
     export default {
-        name: "${capitalize(field.name)}Combobox",
+        name: "${capitalize(field.ref)}Combobox",
         mixins: [InputErrorsByProps, RequiredRule],
         props:{
             value: {

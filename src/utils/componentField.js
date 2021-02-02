@@ -48,7 +48,7 @@ function generateComboField(field, modelName, moduleName) {
 function generateComboListField(field, modelName, moduleName) {
     let content = `
                    <v-col cols="12" sm="6">
-                        <${kebabCase(field.ref)}-combobox multiple v-model="form.${field.name}" :input-errors="inputErrors" />
+                        <${kebabCase(field.ref)}-combobox v-model="form.${field.name}" :input-errors="inputErrors" />
                    </v-col>    
 `
     return content

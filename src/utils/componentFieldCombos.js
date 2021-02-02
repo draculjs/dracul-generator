@@ -96,7 +96,7 @@ function filterObjectIdProperties(properties) {
             return false
         }
 
-        if (field.type == 'ObjectId') {
+        if (field.type == 'ObjectId' || field.type == 'ObjectIdList') {
             return true
         }
         return false

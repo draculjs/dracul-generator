@@ -195,7 +195,7 @@ class FrontGeneratorManager {
     generateFormCombos() {
         this.source.models.forEach(model => {
             model.properties.forEach(field => {
-                if (field.type == 'ObjectId') {
+                if (field.type == 'ObjectId' || field.type == 'ObjectIdList') {
                     let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Form/'
                     createDir(dirPath)
                     let name = capitalize(field.ref) + 'Combobox'
