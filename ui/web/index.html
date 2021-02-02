@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generator</title>
+    <script src="assets/vue.js"></script>
+
+    <link rel="stylesheet" href="assets/bootstrap/bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/main.css"/>
+</head>
+<body class="modal-open" >
+
+
+<div id="app" >
+    <navbar @save="save" @generate="generate"></navbar>
+    <div class="container-fluid">
+        <modal @close="showDialog = false" :show="showDialog" :title="titleDialog" :body="bodyDialog" ></modal>
+        <div class="row">
+            <div class="col-3">
+                <div class="p-1">
+                    <module-card @update-module-name="updateModuleName" @load-demo-module="loadDemoModule"
+                                 @load-module="loadModule"
+                                 :name="moduleName"></module-card>
+                </div>
+
+                <div class="p-1">
+                    <entity-card :module-name="moduleName" :entities="models" @selected-entity="selectModel" @create-entity="createModel" @update-entity="editModel" @delete-entity="deleteModel"></entity-card>
+                </div>
+            </div>
+
+            <!-- LIST PROPERTIES-->
+            <div class="col-3">
+                <div class="p-1">
+                    <list-property-card
+                            @add-prop="addProp"
+                            @del-prop="delProp"
+                            @select-prop="selectProp"
+                            :properties="getModelProperties"
+                            :entity-name="getModelName"
+                            :selected="propSelected"
+                    >
+
+                    </list-property-card>
+                </div>
+            </div>
+
+            <!-- FORM PROPERTIES-->
+            <div class="col-6">
+                <div class="p-1">
+                    <div class="card" v-if="modelselected !== null">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted ">Property <b>{{getPropSelected.name}}</b></h6>
+                            <alert v-if="alert" :message="alert" @end="alert=null"></alert>
+                            <form-property @new="propSelected=null" @apply="apply" :p="getPropSelected"></form-property>
+                        </div>
+                    </div>
+                    <div class="card" v-else>
+                        <div class="card-body">
+                            Seleccionar o crear un modulo
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<script src="assets/bootstrap/bootstrap.min.js"></script>-->
+<script src="components/FormName.js"></script>
+<script src="components/Modal.js"></script>
+<script src="components/ModuleCard.js"></script>
+<script src="components/EntityCard.js"></script>
+<script src="components/ListPropertyCard.js"></script>
+<script src="components/alert.js"></script>
+<script src="components/formModel.js"></script>
+<script src="components/InputText.js"></script>
+<script src="components/InputCheckbox.js"></script>
+<script src="components/InputSelect.js"></script>
+<script src="components/FormProperty.js"></script>
+<script src="components/Navbar.js"></script>
+
+<script src="app.js"></script>
+</body>
+</html>
