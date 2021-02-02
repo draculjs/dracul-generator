@@ -22,7 +22,7 @@ module.exports = function ({model,moduleName}) {
 
     import ${model.name}Provider from "../../../providers/${model.name}Provider";
     
-    import {CrudCreate, ClientError} from '@ci-common-module/frontend'
+    import {CrudCreate, ClientError} from '@dracul/common-frontend'
     
     import ${model.name}Form from "../${model.name}Form";
     

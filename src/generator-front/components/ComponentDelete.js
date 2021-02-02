@@ -35,7 +35,7 @@ module.exports = function ({model, moduleName}) {
     import ${model.name}ShowData from "../${model.name}Show/${model.name}ShowData";
     
     //Common
-    import {CrudDelete, ClientError} from '@ci-common-module/frontend'
+    import {CrudDelete, ClientError} from '@dracul/common-frontend'
     
     export default {
         name: "${model.name}Delete",

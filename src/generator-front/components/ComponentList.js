@@ -55,7 +55,7 @@ module.exports = function ({model, moduleName}) {
 <script>
    import ${model.name}Provider from "../../../providers/${model.name}Provider";
    
-   import {DeleteButton, EditButton, ShowButton, SearchInput} from "@ci-common-module/frontend"
+   import {DeleteButton, EditButton, ShowButton, SearchInput} from "@dracul/common-frontend"
     
     export default {
         name: "${model.name}List",

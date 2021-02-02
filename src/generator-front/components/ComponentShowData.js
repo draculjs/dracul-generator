@@ -25,7 +25,7 @@ module.exports = function ({model, moduleName}) {
     </v-row>
 </template>
 <script>
-    import {ShowField} from '@ci-common-module/frontend'
+    import {ShowField} from '@dracul/common-frontend'
     
     export default {
         name: '${model.name}ShowData',

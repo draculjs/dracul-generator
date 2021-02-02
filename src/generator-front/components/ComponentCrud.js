@@ -57,7 +57,7 @@ module.exports = function ({model, moduleName}) {
     import ${model.name}Show from "../${model.name}Show";
     import ${model.name}List from "../${model.name}List";
     
-     import {CrudLayout, AddButton, Snackbar} from "@ci-common-module/frontend"
+     import {CrudLayout, AddButton, Snackbar} from "@dracul/common-frontend"
      
     export default {
         name: "${model.name}Crud",

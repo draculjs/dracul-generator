@@ -15,7 +15,7 @@ module.exports = function ({model,moduleName}) {
 
 <script>
     import ${model.name}ShowData from "./${model.name}ShowData";
-    import {CrudShow} from '@ci-common-module/frontend'
+    import {CrudShow} from '@dracul/common-frontend'
  
     export default {
         name: "${model.name}Show",

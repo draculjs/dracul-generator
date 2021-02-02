@@ -15,7 +15,7 @@ module.exports = function ({model, moduleName}) {
 
 <script>
 
-    import {InputErrorsByProps, RequiredRule} from '@ci-common-module/frontend'
+    import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
     
     ${generateImportCombos(model.properties)}
     

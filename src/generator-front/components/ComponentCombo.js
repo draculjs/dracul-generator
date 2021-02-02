@@ -26,7 +26,7 @@ module.exports = function ({field, model, moduleName}) {
 
 <script>
 
-    import {InputErrorsByProps, RequiredRule} from '@ci-common-module/frontend'
+    import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
     
     import ${capitalize(field.ref)}Provider from "../../../providers/${capitalize(field.ref)}Provider"
     
