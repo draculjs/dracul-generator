@@ -2,7 +2,7 @@ const capitalize = require('../../utils/capitalize')
 const descapitalize = require('../../utils/descapitalize')
 const pluralize = require('../../utils/pluralize')
 const getI18nKey = require('../../utils/getI18nKey')
-const enumStringToArray = require('../../utils/enumStringToArray')
+const enumOptionsArrayList = require('../../utils/enumOptionsArrayList')
 
 module.exports = function ({field, model, moduleName}) {
     let content =
@@ -32,7 +32,7 @@ module.exports = function ({field, model, moduleName}) {
     ${provider(field)}
 
     export default {
-        name: "${capitalize(field.ref)}Combobox",
+        name: "${capitalize(field.name)}Combobox",
         mixins: [InputErrorsByProps, RequiredRule],
         props:{
             value: {
@@ -41,7 +41,7 @@ module.exports = function ({field, model, moduleName}) {
         },
         data() {
             return {
-                items: [${enumOptionsArrayList(field)}],
+                items: ${enumOptionsArrayList(field.enumOptions)},
                 loading: false
             }
         },
@@ -66,10 +66,6 @@ module.exports = function ({field, model, moduleName}) {
 `
 
 return content
-}
-
-function enumOptionsArrayList(field){
-    enumStringToArray(field.enumOptions).map(opt => "'"+opt+"'").join(",")
 }
 
 function provider(field){

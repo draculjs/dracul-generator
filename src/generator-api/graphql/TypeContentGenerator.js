@@ -66,7 +66,7 @@ function enumProps(properties){
     let enumProps = properties.filter(prop => prop.type == "Enum" || prop.type == "EnumList")
     return enumProps.map(field => {
     return `enum ${field.name}Enum{
-        ${enumStringToArray(field.enumOPtions).join(",\n")}
+        ${enumStringToArray(field.enumOptions).join(",\n")}
     }`
     }).join('\n')
 }

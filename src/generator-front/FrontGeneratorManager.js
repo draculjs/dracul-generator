@@ -208,7 +208,7 @@ class FrontGeneratorManager {
                 if (field.type == 'Enum' || field.type == 'EnumList') {
                     let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Form/'
                     createDir(dirPath)
-                    let name = capitalize(field.ref) + 'Combobox'
+                    let name = capitalize(field.name) + 'Combobox'
                     let fileName = name + '.vue'
                     let filePath = dirPath + fileName
                     writeFile(filePath, ComponentComboEnum, {field: field, model: model, moduleName: this.source.module }, fileName)
