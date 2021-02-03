@@ -37,7 +37,7 @@ module.exports = function ({field, model, moduleName}) {
         mixins: [InputErrorsByProps, RequiredRule],
         props:{
             value: {
-                type: String
+               type: [String, Array]
             },
         },
         data() {

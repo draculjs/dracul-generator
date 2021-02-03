@@ -66,7 +66,7 @@ function getItems(model, column, moduleName) {
             case 'ObjectId':
                 return ` <show-field :value="item.${field.name}.${field.refDisplayField}" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}')" icon="${field.icon}"/>`
             case 'ObjectIdList':
-                return ` <show-field :value="item.${field.name}.map(i => i.${field.refDisplayField})" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}')" icon="${field.icon}"/>`
+                return ` <show-field :value="item.${field.name}.map(i => i.${field.refDisplayField}).join(', ')" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}')" icon="${field.icon}"/>`
             default:
                 return ` <show-field :value="item.${field.name}" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}')" icon="${field.icon}"/>`
         }
