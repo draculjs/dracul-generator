@@ -8,13 +8,14 @@ Vue.component('FormProperty', {
     },
     data() {
         return {
-            options: ['String','Int','Float','Date','ObjectId','ObjectIdList'],
+            options: ['String','Int','Float','Date','ObjectId','ObjectIdList', 'Enum', 'EnumList'],
             errors:[],
             form: {
                 name: this.p.name?this.p.name:'',
                 type: this.p.type?this.p.type:'',
                 ref: this.p.ref?this.p.ref:'',
                 refDisplayField: this.p.refDisplayField?this.p.refDisplayField:'',
+                enumOptions: this.p.enumOptions?this.p.enumOptions:'',
                 label: this.p.label?this.p.label:'',
                 icon: this.p.icon?this.p.icon:'',
                 required: this.p.required?this.p.required:false,
@@ -96,6 +97,10 @@ Vue.component('FormProperty', {
     
       <div class="col-12 py-1" v-if="form.type =='ObjectId' || form.type =='ObjectIdList'">
         <input-text  label="RefDisplayField" name="refDisplayField" v-model="form.refDisplayField" :errors="errors"></input-text>
+    </div>
+    
+      <div class="col-12 py-1" v-if="form.type =='Enum' || form.type =='EnumList'">
+        <input-text  label="Enum Options" name="enumOptions" v-model="form.enumOptions" :errors="errors"></input-text>
     </div>
     
     <div class="col-12 py-1">

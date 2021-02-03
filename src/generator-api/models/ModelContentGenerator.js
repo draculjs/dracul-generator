@@ -1,3 +1,5 @@
+const enumStringToArray = require('../../utils/enumStringToArray')
+
 module.exports = function (model) {
     let content =
 `const mongoose = require('mongoose'); 
@@ -35,6 +37,13 @@ function fields(properties) {
             case "ObjectIdList":
                 if(!field.ref) throw new Error("Field " + field.name + "  has ObjectIdList type so needs ref atributte")
                 return ` ${field.name}: [{type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}",required: ${field.required}}]`
+            case "Enum":
+                if(!field.ref) throw new Error("Field " + field.name + "  has ObjectId type so needs ref atributte")
+                return ` ${field.name}: {type: String, enum: "${enumStringToArray(field.enumOptions)}", required: ${field.required}}`
+            case "EnumList":
+                if(!field.ref) throw new Error("Field " + field.name + "  has ObjectIdList type so needs ref atributte")
+                return ` ${field.name}: [{type: String, enum: "${enumStringToArray(field.enumOptions)}",required: ${field.required}}]`
+
             case "Float":
                 return ` ${field.name}: {type: Number, required: ${field.required}}`
             case "Int":

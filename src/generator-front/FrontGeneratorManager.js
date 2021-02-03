@@ -21,7 +21,8 @@ const ComponentUpdate = require("./components/ComponentUpdate");
 const ComponentDelete = require("./components/ComponentDelete");
 const ComponentShowData = require("./components/ComponentShowData");
 const ComponentShow = require("./components/ComponentShow");
-const ComponentCombo = require("./components/ComponentCombo");
+const ComponentComboObjectId = require("./components/ComponentComboObjectId");
+const ComponentComboEnum = require("./components/ComponentComboEnum");
 
 //GQL
 const GqlFetchAll = require("./providers/gql/GqlFetchAll")
@@ -201,7 +202,16 @@ class FrontGeneratorManager {
                     let name = capitalize(field.ref) + 'Combobox'
                     let fileName = name + '.vue'
                     let filePath = dirPath + fileName
-                    writeFile(filePath, ComponentCombo, {field: field, model: model, moduleName: this.source.module }, fileName)
+                    writeFile(filePath, ComponentComboObjectId, {field: field, model: model, moduleName: this.source.module }, fileName)
+                }
+
+                if (field.type == 'Enum' || field.type == 'EnumList') {
+                    let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Form/'
+                    createDir(dirPath)
+                    let name = capitalize(field.ref) + 'Combobox'
+                    let fileName = name + '.vue'
+                    let filePath = dirPath + fileName
+                    writeFile(filePath, ComponentComboEnum, {field: field, model: model, moduleName: this.source.module }, fileName)
                 }
             })
         })

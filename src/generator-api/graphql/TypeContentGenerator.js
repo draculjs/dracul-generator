@@ -1,11 +1,14 @@
 const capitalize = require('../../utils/capitalize')
 const descapitalize = require('../../utils/descapitalize')
 const filterBackendProperties = require('../../utils/filterBackendProperties')
+const enumStringToArray = require('../../utils/enumStringToArray')
 
 module.exports = function (model) {
 //TYPE DEFINITION
     let content =
         `
+${enumProps(model.properties)}        
+        
 type ${model.name}{
 id: ID!
 ${fields(model.properties)}
@@ -58,6 +61,15 @@ function findByMethod(model, field){
     return content
 }
 
+function enumProps(properties){
+
+    let enumProps = properties.filter(prop => prop.type == "Enum" || prop.type == "EnumList")
+    return enumProps.map(field => {
+    return `enum ${field.name}Enum{
+        ${enumStringToArray(field.enumOPtions).join(",\n")}
+    }`
+    }).join('\n')
+}
 
 function fields(properties, input = false) {
 
@@ -87,6 +99,10 @@ function fields(properties, input = false) {
                 return ` ${field.name}: [${field.ref}${field.required ? "!" : ""}]`
             case "Date":
                 return ` ${field.name}: String${field.required ? "!" : ""}`
+            case "Enum":
+                return ` ${field.name}: ${field.name}Enum${field.required ? "!" : ""}`
+            case "EnumList":
+                return ` ${field.name}: [${field.name}Enum${field.required ? "!" : ""}]`
             default:
                 return ` ${field.name}: ${field.type}${field.required ? "!" : ""}`
 
