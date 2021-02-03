@@ -93,6 +93,8 @@ function generateFormObjectFields(properties) {
                 return `${field.name}: moment(parseInt(this.item.${field.name})).format('YYYY-MM-DD')`
             case 'ObjectId':
                 return `${field.name}: this.item.${field.name}.id`
+            case 'ObjectIdList':
+                return `${field.name}: this.item.${field.name}.map(i=> i.id?i.id:i)`
             default:
                 return `${field.name}: this.item.${field.name}`
         }

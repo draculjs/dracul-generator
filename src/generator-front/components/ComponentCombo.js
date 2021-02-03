@@ -6,7 +6,7 @@ const getI18nKey = require('../../utils/getI18nKey')
 module.exports = function ({field, model, moduleName}) {
     let content =
 `<template>
-    <v-col cols="12" sm="6">
+
         <v-select
                 ${field.type == 'ObjectIdList' ? 'multiple' : ''}
                 prepend-icon="${field.icon ? field.icon : 'label'}"
@@ -22,7 +22,7 @@ module.exports = function ({field, model, moduleName}) {
                 item-color="secondary"
                 ${field.required?':rules="required"':''}
         ></v-select>
-    </v-col>
+
 </template>
 
 <script>
