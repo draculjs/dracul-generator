@@ -5,6 +5,8 @@ module.exports = function componentField(field, modelName, moduleName) {
     switch (field.type) {
         case 'String':
             return generateTextField(field, modelName, moduleName)
+        case 'Boolean':
+            return generateBooleanField(field, modelName, moduleName)
         case 'Date':
             return generateDateField(field, modelName, moduleName)
         case 'ObjectId':
@@ -33,6 +35,24 @@ function generateTextField(field, modelName, moduleName) {
                                 color="secondary"
                                 ${field.required ? ':rules="required"' : ''}
                         ></v-text-field>
+                    </v-col>
+    `
+    return content
+}
+
+function generateBooleanField(field, modelName, moduleName) {
+    let content = `
+                    <v-col cols="12" sm="6">
+                        <v-checkbox
+                                prepend-icon="${field.icon ? field.icon : 'label'}"
+                                name="${field.name}"
+                                v-model="form.${field.name}"
+                                :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
+                                :error="hasInputErrors('${field.name}')"
+                                :error-messages="getInputErrors('${field.name}')"
+                                color="secondary"
+                                ${field.required ? ':rules="required"' : ''}
+                        ></v-checkbox>
                     </v-col>
     `
     return content

@@ -40,7 +40,7 @@ var app = new Vue({
             this.loadModule()
         },
         loadModule() {
-            fetch('http://localhost:4060/load/' + this.moduleName)
+            fetch('http://localhost:4060/load/' + this.moduleName,{cache:"no-store"})
                 .then(r => {
                     return r.json()
                 }).then(j => {

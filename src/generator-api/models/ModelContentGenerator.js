@@ -46,6 +46,8 @@ function fields(properties) {
                 return ` ${field.name}: {type: Number, required: ${field.required}}`
             case "Int":
                 return ` ${field.name}: {type: Number, required: ${field.required}}`
+            case "Boolean":
+                return ` ${field.name}: {type: Boolean, required: ${field.required}}`
             default:
                 return ` ${field.name}: {type: ${field.type}, required: ${field.required}}`
 

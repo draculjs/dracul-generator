@@ -99,6 +99,8 @@ function fields(properties, input = false) {
                 return ` ${field.name}: [${field.ref}${field.required ? "!" : ""}]`
             case "Date":
                 return ` ${field.name}: String${field.required ? "!" : ""}`
+            case "Boolean":
+                return ` ${field.name}: Boolean${field.required ? "!" : ""}`
             case "Enum":
                 return ` ${field.name}: ${field.name}Enum${field.required ? "!" : ""}`
             case "EnumList":
