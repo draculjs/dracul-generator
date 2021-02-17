@@ -1,7 +1,6 @@
 const filterBackendProperties = require('../../utils/filterBackendProperties')
 const componentField = require('../../utils/componentField')
 const {generateImportCombos, generateImportCombosEnum, generateImportComponentCombos} = require('../../utils/componentFieldCombos')
-const importMomentIfDateExist = require('../../utils/importMomentIfDateExist')
 
 module.exports = function ({model, moduleName}) {
     let content =
@@ -20,7 +19,6 @@ module.exports = function ({model, moduleName}) {
     ${generateImportCombos(model.properties)}
     ${generateImportCombosEnum(model.properties)}
     
-    ${importMomentIfDateExist(model.properties)}
 
     export default {
         name: "${model.name}Form",
