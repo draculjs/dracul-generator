@@ -11,6 +11,9 @@ module.exports = function componentField(field, modelName, moduleName) {
             return generateComboField(field, modelName, moduleName)
         case 'ObjectIdList':
             return generateComboListField(field, modelName, moduleName)
+        case 'Enum':
+        case 'EnumList':
+            return generateComboEnumField(field, modelName, moduleName)
         default:
             return generateTextField(field, modelName, moduleName)
     }
@@ -49,6 +52,15 @@ function generateComboListField(field, modelName, moduleName) {
     let content = `
                    <v-col cols="12" sm="6">
                         <${kebabCase(field.ref)}-combobox v-model="form.${field.name}" :input-errors="inputErrors" />
+                   </v-col>    
+`
+    return content
+}
+
+function generateComboEnumField(field, modelName, moduleName) {
+    let content = `
+                   <v-col cols="12" sm="6">
+                        <${kebabCase(field.name)}-combobox v-model="form.${field.name}" :input-errors="inputErrors" />
                    </v-col>    
 `
     return content

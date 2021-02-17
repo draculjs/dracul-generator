@@ -29,6 +29,10 @@ function variables(properties){
                 return `$${field.name}:ID${field.required?'!':''}`
             case 'ObjectIdList':
                 return `$${field.name}:[ID${field.required?'!':''}]`
+            case 'Enum':
+                return `$${field.name}:${field.name}Enum${field.required?'!':''}`
+            case 'EnumList':
+                return `$${field.name}:[${field.name}Enum${field.required?'!':''}]`
             case 'Date':
                 return `$${field.name}:String${field.required?'!':''}`
             default:

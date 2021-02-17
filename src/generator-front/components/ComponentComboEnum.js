@@ -29,7 +29,6 @@ module.exports = function ({field, model, moduleName}) {
     import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
     
     
-    ${provider(field)}
 
     export default {
         name: "${capitalize(field.name)}Combobox",
@@ -68,27 +67,4 @@ module.exports = function ({field, model, moduleName}) {
 return content
 }
 
-function provider(field){
-    if(field.ref == 'User'){
-        return `import {userProvider} from "@dracul/user-frontend"`
-    }else{
-        return `import ${capitalize(field.ref)}Provider from "../../../providers/${capitalize(field.ref)}Provider"`
-    }
-}
 
-
-function fetchFunction(field){
-    if(field.ref == 'User'){
-        return `this.loading= true
-              userProvider.users().then(r => {
-                    this.items = r.data.users
-                }).catch(err => console.error(err))
-                .finally(()=> this.loading = false)`
-    }else{
-        return `this.loading= true
-                ${capitalize(field.ref)}Provider.fetch${capitalize(pluralize(field.ref))}().then(r => {
-                    this.items = r.data.${descapitalize(field.ref)}Fetch
-                }).catch(err => console.error(err))
-                .finally(()=> this.loading = false)`
-    }
-}

@@ -1,6 +1,6 @@
 const filterBackendProperties = require('../../utils/filterBackendProperties')
 const componentField = require('../../utils/componentField')
-const {generateImportCombos, generateImportComponentCombos} = require('../../utils/componentFieldCombos')
+const {generateImportCombos, generateImportCombosEnum, generateImportComponentCombos} = require('../../utils/componentFieldCombos')
 const importMomentIfDateExist = require('../../utils/importMomentIfDateExist')
 
 module.exports = function ({model, moduleName}) {
@@ -18,6 +18,7 @@ module.exports = function ({model, moduleName}) {
     import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
     
     ${generateImportCombos(model.properties)}
+    ${generateImportCombosEnum(model.properties)}
     
     ${importMomentIfDateExist(model.properties)}
 

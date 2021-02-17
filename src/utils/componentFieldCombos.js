@@ -43,14 +43,27 @@ module.exports.generateImportCombos = function generateImportCombos(properties) 
     }).join('\n')
 }
 
+module.exports.generateImportCombosEnum = function generateImportCombos(properties) {
+
+    let propFiltered = properties.filter(f => f.type == "Enum" || f.type == "EnumList");
+
+    return propFiltered.map(field => {
+        return `import ${capitalize(field.name)}Combobox from "./${capitalize(field.name)}Combobox";`
+    }).join('\n')
+}
+
 module.exports.generateImportComponentCombos = function generateImportCombos(properties) {
 
-    let propFiltered = filterObjectIdProperties(properties);
+    let propFiltered = filterObjectIdAndEnumProperties(properties);
 
     let combos = propFiltered.map(field => {
-        return `${capitalize(field.ref)}Combobox`
+        if (field.type == "ObjectId" || field.type == "ObjectIdList") {
+            return `${capitalize(field.ref)}Combobox`
+        } else if (field.type == "Enum" || field.type == "EnumList") {
+            return `${capitalize(field.name)}Combobox`
+        }
     }).join(',\n')
-    if(combos.length > 0){
+    if (combos.length > 0) {
         return "components: {" + combos + "},"
     }
     return ''
@@ -99,6 +112,26 @@ function filterObjectIdProperties(properties) {
         if (field.type == 'ObjectId' || field.type == 'ObjectIdList') {
             return true
         }
+        return false
+    })
+    return propFiltered;
+}
+
+function filterObjectIdAndEnumProperties(properties) {
+    let propFiltered = properties.filter(field => {
+
+        if (field.name == 'createdBy' || field.name == 'updatedBy' || field.name == 'createdAt' || field.name == 'updatedAt') {
+            return false
+        }
+
+        if (field.type == 'ObjectId' || field.type == 'ObjectIdList') {
+            return true
+        }
+
+        if (field.type == 'Enum' || field.type == 'EnumList') {
+            return true
+        }
+
         return false
     })
     return propFiltered;

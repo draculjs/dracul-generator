@@ -73,14 +73,24 @@ module.exports = function ({model, moduleName}) {
                 orderDesc: false,
                 itemsPerPage: 5,
                 pageNumber: 1,
-                search: '',
-                headers: [
+                search: ''
+            }
+        },
+        computed: {   
+          headers () {
+            return [
                     //Entity Headers
                     ${headers(model.properties, model.name, moduleName)},
                     //Actions
                     {text: this.$t('common.actions'), value: 'action', sortable: false},
-                ],
-            }
+                ]
+          },
+          getOrderBy(){
+              return  (Array.isArray(this.orderBy)) ? this.orderBy[0]: this.orderBy
+          },
+          getOrderDesc(){
+              return  (Array.isArray(this.orderDesc)) ? this.orderDesc[0]: this.orderDesc
+          } 
         },
         created() {
             this.fetch()
@@ -105,14 +115,6 @@ module.exports = function ({model, moduleName}) {
                     console.error(err)
                 }).finally(() => this.loading = false)
             }
-        },
-        computed: {
-          getOrderBy(){
-              return  (Array.isArray(this.orderBy)) ? this.orderBy[0]: this.orderBy
-          },
-          getOrderDesc(){
-              return  (Array.isArray(this.orderDesc)) ? this.orderDesc[0]: this.orderDesc
-          } 
         }
         
     }
@@ -133,11 +135,11 @@ function headers(properties, modelName, moduleName) {
     return content
 }
 
-function refProps(properties){
+function refProps(properties) {
     let content = ''
 
     //Object Id List Props
-    let objIdListProps =  filterObjectIdListProperties(properties)
+    let objIdListProps = filterObjectIdListProperties(properties)
 
     content += objIdListProps.map(field => {
         return `
@@ -148,12 +150,12 @@ function refProps(properties){
     }).join('\n ')
 
     //Object Id Props
-    let objIdProps =  filterObjectIdProperties(properties)
+    let objIdProps = filterObjectIdProperties(properties)
 
     content += objIdProps.map(field => {
         return `
          <template v-slot:item.${field.name}="{ item }">
-            {{ ${field.refDisplayField} }}
+            {{ item.${field.name}.${field.refDisplayField} }}
          </template>
         `
     }).join('\n ')

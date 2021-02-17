@@ -8,7 +8,7 @@ Vue.component('FormProperty', {
     },
     data() {
         return {
-            options: ['String','Int','Float','Date','ObjectId','ObjectIdList', 'Enum', 'EnumList'],
+            options: ['String','Int','Float','Date','Boolean','ObjectId','ObjectIdList', 'Enum', 'EnumList'],
             errors:[],
             form: {
                 name: this.p.name?this.p.name:'',
