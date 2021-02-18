@@ -4,6 +4,9 @@ const capitalize = require('../../utils/capitalize')
 const descapitalize = require('../../utils/descapitalize')
 const filterObjectIdProperties = require('../../utils/filterObjectIdProperties')
 const filterObjectIdListProperties = require('../../utils/filterObjectIdListProperties')
+const filterDateProperties = require('../../utils/filterDateProperties')
+const importDayjsMixinIfDateExist = require('../../utils/importDayjsMixinIfDateExist')
+const dateExist = require('../../utils/dateExist')
 
 module.exports = function ({model, moduleName}) {
     let content =
@@ -37,6 +40,8 @@ module.exports = function ({model, moduleName}) {
 
             ${refProps(model.properties)}
             
+            ${dateProps(model.properties)}
+            
             <template slot="no-data">
                <div class="text-xs-center" v-t="'common.noData'"></div>
             </template>
@@ -60,10 +65,12 @@ module.exports = function ({model, moduleName}) {
    import ${model.name}Provider from "../../../providers/${model.name}Provider";
    
    import {DeleteButton, EditButton, ShowButton, SearchInput} from "@dracul/common-frontend"
-    
+   ${importDayjsMixinIfDateExist(model.properties)} 
+   
     export default {
         name: "${model.name}List",
         components: {DeleteButton, EditButton, ShowButton, SearchInput},
+        ${dateExist(model.properties)?'mixins: [DayjsMixin],':''}
         data() {
             return {
                 items: [],
@@ -159,6 +166,34 @@ function refProps(properties) {
          </template>
         `
     }).join('\n ')
+
+    return content
+}
+
+function dateProps(properties) {
+    let content = ''
+
+    //Object Id List Props
+    let objIdListProps = filterDateProperties(properties)
+
+    content += objIdListProps.map(field => {
+        if(field.type === "Date"){
+            return `
+         <template v-slot:item.${field.name}="{ item }">
+            {{getDateFormat(item.${field.name})}}
+         </template>
+        `
+        }else if(field.type === "Datetime"){
+            return `
+         <template v-slot:item.${field.name}="{ item }">
+            {{getDateTimeFormat(item.${field.name})}}
+         </template>
+        `
+        }
+
+    }).join('\n ')
+
+
 
     return content
 }
