@@ -1,7 +1,7 @@
 const kebabCase = require('../../utils/kebabCase')
 const descapitalize = require('../../utils/descapitalize')
 const filterBackendProperties = require('../../utils/filterBackendProperties')
-const importMomentIfDateExist = require('../../utils/importMomentIfDateExist')
+const importDayjsIfDateExist = require('../../utils/importDayjsIfDateExist')
 const getI18nKey = require('../../utils/getI18nKey')
 
 module.exports = function ({model,moduleName}) {
@@ -27,7 +27,7 @@ module.exports = function ({model,moduleName}) {
     import ${model.name}Form from "../${model.name}Form";
     
     
-    ${importMomentIfDateExist(model.properties)}
+
 
     export default {
         name: "${model.name}Create",
@@ -92,7 +92,9 @@ function generateFormObjectFields(properties) {
     return propFiltered.map(field => {
         switch (field.type) {
             case 'Date':
-                return `${field.name}: moment().format("YYYY-MM-DD")`
+                return `${field.name}: null`
+            case 'Datetime':
+                return `${field.name}: null`
             case 'String':
                 return `${field.name}: ''`
             case 'ObjectId':

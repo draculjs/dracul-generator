@@ -9,6 +9,8 @@ module.exports = function componentField(field, modelName, moduleName) {
             return generateBooleanField(field, modelName, moduleName)
         case 'Date':
             return generateDateField(field, modelName, moduleName)
+        case 'Datetime':
+            return generateDatetimeField(field, modelName, moduleName)
         case 'ObjectId':
             return generateComboField(field, modelName, moduleName)
         case 'ObjectIdList':
@@ -91,7 +93,7 @@ function generateDateField(field, modelName, moduleName) {
     let content = `
                    <v-col cols="12" sm="6">
                         <v-menu
-                                v-model="modal"
+                                v-model="${field.name}DateMenu"
                                 :close-on-content-click="false"
                                 :nudge-right="40"
                                 transition="scale-transition"
@@ -116,6 +118,72 @@ function generateDateField(field, modelName, moduleName) {
                         </v-menu>
 
                     </v-col>
+    `
+    return content
+}
+
+
+function generateDatetimeField(field, modelName, moduleName) {
+    let content = `
+                   <v-col cols="12" sm="6">
+                     <v-row>
+                       <v-col  sm="6">
+                          <v-menu
+                                v-model="${field.name}DateMenu"
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px"
+                          >
+                            <template v-slot:activator="{ on }">
+                                <v-text-field
+                                        :value="getDateFormat(form.${field.name})"
+                                        :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
+                                        prepend-icon="${field.icon ? field.icon : 'event'}"
+                                        readonly
+                                        v-on="on"
+                                        ${field.required ? ':rules="required"' : ''}
+                                        :error="hasInputErrors('${field.name}')"
+                                        :error-messages="getInputErrors('${field.name}')"
+                                        color="secondary"
+                                ></v-text-field>
+                            </template>
+                            <v-date-picker :value="getDateFormat(form.${field.name})" @input="val => setDateToFormField('${field.name}', val)">
+                            </v-date-picker>
+                          </v-menu>
+                       </v-col>
+                   
+                       <v-col sm="6">
+                       <v-menu
+                                v-model="${field.name}TimeMenu"
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px"
+                          >
+                            <template v-slot:activator="{ on }">
+                                <v-text-field
+                                        :value="getTimeFormat(form.${field.name})"
+                                        :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
+                                        prepend-icon="${field.icon ? field.icon : 'query_builder'}"
+                                        readonly
+                                        v-on="on"
+                                        ${field.required ? ':rules="required"' : ''}
+                                        :error="hasInputErrors('${field.name}')"
+                                        :error-messages="getInputErrors('${field.name}')"
+                                        color="secondary"
+                                ></v-text-field>
+                            </template>
+                            <v-time-picker :value="getTimeFormat(form.${field.name})" @input="val => setTimeToFormField('${field.name}', val)">
+                            </v-time-picker>
+                          </v-menu>
+                       </v-col>
+                       
+                     </v-row>
+
+                   </v-col>
     `
     return content
 }

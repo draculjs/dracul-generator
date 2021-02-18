@@ -1,8 +1,7 @@
 const kebabCase = require('../../utils/kebabCase')
 const descapitalize = require('../../utils/descapitalize')
 const filterBackendProperties = require('../../utils/filterBackendProperties')
-const {generateDataCombos} = require('../../utils/componentFieldCombos')
-const importMomentIfDateExist = require('../../utils/importMomentIfDateExist')
+const importDayjsIfDateExist = require('../../utils/importDayjsIfDateExist')
 const getI18nKey = require('../../utils/getI18nKey')
 
 module.exports = function ({model,moduleName}) {
@@ -27,7 +26,7 @@ module.exports = function ({model,moduleName}) {
     
     import ${model.name}Form from "../${model.name}Form";
   
-    ${importMomentIfDateExist(model.properties)}
+    ${importDayjsIfDateExist(model.properties)}
 
     export default {
         name: "${model.name}Update",
@@ -90,7 +89,9 @@ function generateFormObjectFields(properties) {
     return propFiltered.map(field => {
         switch(field.type){
             case 'Date':
-                return `${field.name}: moment(parseInt(this.item.${field.name})).format('YYYY-MM-DD')`
+                return `${field.name}: this.item.${field.name}?Dayjs(parseInt(this.item.${field.name})):null`
+            case 'Datetime':
+                return `${field.name}: this.item.${field.name}?Dayjs(parseInt(this.item.${field.name})):null`
             case 'ObjectId':
                 return `${field.name}: this.item.${field.name}.id`
             case 'ObjectIdList':

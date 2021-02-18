@@ -34,6 +34,7 @@ function variables(properties){
             case 'EnumList':
                 return `$${field.name}:[${field.name}Enum${field.required?'!':''}]`
             case 'Date':
+            case 'Datetime':
                 return `$${field.name}:String${field.required?'!':''}`
             default:
                 return `$${field.name}:${field.type}${field.required?'!':''}`
