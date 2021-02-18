@@ -5,6 +5,7 @@ module.exports = function (model) {
 `const mongoose = require('mongoose'); 
 const softDelete = require('mongoose-softdelete')
 const mongoosePaginate = require('mongoose-paginate-v2');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const Schema = mongoose.Schema;
 
@@ -17,6 +18,7 @@ ${fields(model.properties)}
 
 ${model.name}Schema.plugin(softDelete);
 ${model.name}Schema.plugin(mongoosePaginate);
+${model.name}Schema.plugin(uniqueValidator, {message: 'validation.unique'});
 
 const ${model.name} = mongoose.model('${model.name}', ${model.name}Schema);
 

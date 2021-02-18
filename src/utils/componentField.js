@@ -5,6 +5,9 @@ module.exports = function componentField(field, modelName, moduleName) {
     switch (field.type) {
         case 'String':
             return generateTextField(field, modelName, moduleName)
+        case 'Int':
+        case 'Float':
+            return generateNumberField(field, modelName, moduleName)
         case 'Boolean':
             return generateBooleanField(field, modelName, moduleName)
         case 'Date':
@@ -31,6 +34,27 @@ function generateTextField(field, modelName, moduleName) {
                                 prepend-icon="${field.icon ? field.icon : 'label'}"
                                 name="${field.name}"
                                 v-model="form.${field.name}"
+                                :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
+                                :placeholder="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
+                                :error="hasInputErrors('${field.name}')"
+                                :error-messages="getInputErrors('${field.name}')"
+                                color="secondary"
+                                ${field.required ? ':rules="required"' : ''}
+                        ></v-text-field>
+                    </v-col>
+    `
+    return content
+}
+
+function generateNumberField(field, modelName, moduleName) {
+    let content = `
+                    <v-col cols="12" sm="6">
+                        <v-text-field
+                                ${field.disabled ? 'disabled' : ''}
+                                prepend-icon="${field.icon ? field.icon : 'label'}"
+                                name="${field.name}"
+                                v-model.number="form.${field.name}"
+                                type="number"
                                 :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
                                 :placeholder="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
                                 :error="hasInputErrors('${field.name}')"

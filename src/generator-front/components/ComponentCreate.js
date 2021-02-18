@@ -97,6 +97,10 @@ function generateFormObjectFields(properties) {
                 return `${field.name}: null`
             case 'String':
                 return `${field.name}: ${field.default?"'"+field.default+"'":"''"}`
+            case 'Int':
+                return `${field.name}: ${field.default?parseInt(field.default):null}`
+            case 'Float':
+                return `${field.name}: ${field.default?parseFloat(field.default):null}`
             case 'Boolean':
                 return `${field.name}: ${(field.default === 'true')?'true':'false'}`
             case 'ObjectId':
