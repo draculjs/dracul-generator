@@ -4,7 +4,7 @@ var app = new Vue({
         getPropSelected() {
             if (this.propSelected === null) {
                 return {
-                    name: '', type: '', ref: '', refDisplayField: '', enumOptions: '', label: '', icon: '', required: false, search: false,
+                    name: '', type: '', ref: '', refDisplayField: '', enumOptions: '', label: '', icon: '', required: false, search: false, disabled:false, unique:false,
                     i18n: {en: '', es: '', pt: ''}
                 }
             } else {

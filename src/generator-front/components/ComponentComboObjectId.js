@@ -8,6 +8,7 @@ module.exports = function ({field, model, moduleName}) {
 `<template>
 
         <v-select
+                ${field.disabled ? 'disabled' : ''}
                 ${field.type == 'ObjectIdList' ? 'multiple' : ''}
                 prepend-icon="${field.icon ? field.icon : 'label'}"
                 :items="items"

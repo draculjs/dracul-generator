@@ -96,11 +96,19 @@ function generateFormObjectFields(properties) {
             case 'Datetime':
                 return `${field.name}: null`
             case 'String':
-                return `${field.name}: ''`
+                return `${field.name}: ${field.default?"'"+field.default+"'":"''"}`
+            case 'Boolean':
+                return `${field.name}: ${(field.default === 'true')?'true':'false'}`
             case 'ObjectId':
                 return `${field.name}: null`
+            case 'ObjectIdList':
+                return `${field.name}: []`
+            case 'Enum':
+                return `${field.name}: ${field.default?"'"+field.default+"'":"''"}`
+            case 'EnumList':
+                return `${field.name}: []`
             default:
-                return `${field.name}: ''`
+                return `${field.name}: ${field.default?"'"+field.default+"'":"''"}`
 
         }
     }).join(',\n                    ')

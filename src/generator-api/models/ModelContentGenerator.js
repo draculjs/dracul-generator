@@ -33,26 +33,26 @@ function fields(properties) {
         switch (field.type) {
             case "ObjectId":
                 if(!field.ref) throw new Error("Field " + field.name + "  has ObjectId type so needs ref atributte")
-                return ` ${field.name}: {type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}",required: ${field.required}}`
+                return ` ${field.name}: {type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}", required: ${field.required}, unique: ${(field.unique === true)?true:false}}`
             case "ObjectIdList":
                 if(!field.ref) throw new Error("Field " + field.name + "  has ObjectIdList type so needs ref atributte")
-                return ` ${field.name}: [{type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}",required: ${field.required}}]`
+                return ` ${field.name}: [{type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}",required: ${field.required}, unique: ${(field.unique === true)?true:false}}]`
             case "Enum":
                 return ` ${field.name}: {type: String, enum: ${enumOptionsArrayList(field.enumOptions)}, required: ${field.required}}`
             case "EnumList":
                 return ` ${field.name}: [{type: String, enum: "${enumOptionsArrayList(field.enumOptions)},required: ${field.required}}]`
 
             case "Float":
-                return ` ${field.name}: {type: Number, required: ${field.required}}`
+                return ` ${field.name}: {type: Number, required: ${field.required}, unique: ${(field.unique === true)?true:false}}`
             case "Int":
-                return ` ${field.name}: {type: Number, required: ${field.required}}`
+                return ` ${field.name}: {type: Number, required: ${field.required}, unique: ${(field.unique === true)?true:false}}`
             case "Boolean":
                 return ` ${field.name}: {type: Boolean, required: ${field.required}}`
             case "Date":
             case "Datetime":
-                return ` ${field.name}: {type: Date, required: ${field.required}}`
+                return ` ${field.name}: {type: Date, required: ${field.required}, unique: ${(field.unique === true)?true:false}}`
             default:
-                return ` ${field.name}: {type: ${field.type}, required: ${field.required}}`
+                return ` ${field.name}: {type: ${field.type}, required: ${field.required}, unique: ${(field.unique === true)?true:false}}`
 
         }
     }).join(',\n')

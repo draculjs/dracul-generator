@@ -18,8 +18,8 @@ Vue.component('InputCheckbox', {
     },
     template: `
 <div class="form-group row mb-0">
-    <label class="col-sm-3 col-form-label text-right">{{label}}: </label>
-    <div class="col-sm-9">
+    <label class="col-sm-6 col-form-label text-right">{{label}}: </label>
+    <div class="col-sm-6">
         <div class="form-check ">
             <input 
                     :class="{'is-invalid': errors.includes(name)}"  

@@ -27,6 +27,7 @@ function generateTextField(field, modelName, moduleName) {
     let content = `
                     <v-col cols="12" sm="6">
                         <v-text-field
+                                ${field.disabled ? 'disabled' : ''}
                                 prepend-icon="${field.icon ? field.icon : 'label'}"
                                 name="${field.name}"
                                 v-model="form.${field.name}"
@@ -102,6 +103,7 @@ function generateDateField(field, modelName, moduleName) {
                         >
                             <template v-slot:activator="{ on }">
                                 <v-text-field
+                                        ${field.disabled ? 'disabled' : ''}
                                         v-model="form.${field.name}"
                                         :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
                                         prepend-icon="${field.icon ? field.icon : 'event'}"
@@ -138,6 +140,7 @@ function generateDatetimeField(field, modelName, moduleName) {
                           >
                             <template v-slot:activator="{ on }">
                                 <v-text-field
+                                        ${field.disabled ? 'disabled' : ''}
                                         :value="getDateFormat(form.${field.name})"
                                         :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
                                         prepend-icon="${field.icon ? field.icon : 'event'}"
@@ -167,7 +170,7 @@ function generateDatetimeField(field, modelName, moduleName) {
                                 <v-text-field
                                         :value="getTimeFormat(form.${field.name})"
                                         :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
-                                        prepend-icon="${field.icon ? field.icon : 'query_builder'}"
+                                        prepend-icon="query_builder"
                                         readonly
                                         v-on="on"
                                         ${field.required ? ':rules="required"' : ''}
