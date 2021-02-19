@@ -18,13 +18,22 @@
         <div class="row">
             <div class="col-3">
                 <div class="p-1">
-                    <module-card @update-module-name="updateModuleName" @load-demo-module="loadDemoModule"
+                    <module-card @update-module-name="updateModuleName"
+                                 @load-demo-module="loadDemoModule"
                                  @load-module="loadModule"
-                                 :name="moduleName"></module-card>
+                                 :name="moduleName">
+                    </module-card>
                 </div>
 
                 <div class="p-1">
-                    <entity-card :module-name="moduleName" :entities="models" @selected-entity="selectModel" @create-entity="createModel" @update-entity="editModel" @delete-entity="deleteModel"></entity-card>
+                    <entity-card :module-name="moduleName"
+                                 :entities="models"
+                                 @selected-entity="selectModel"
+                                 @create-entity="createModel"
+                                 @update-entity="editModel"
+                                 @delete-entity="deleteModel"
+                                 @soft-delete-change="onSoftDeleteChange"
+                    ></entity-card>
                 </div>
             </div>
 
@@ -39,7 +48,6 @@
                             :entity-name="getModelName"
                             :selected="propSelected"
                     >
-
                     </list-property-card>
                 </div>
             </div>
@@ -66,6 +74,8 @@
 </div>
 
 <!--<script src="assets/bootstrap/bootstrap.min.js"></script>-->
+<script src="components/InputText.js"></script>
+<script src="components/InputCheckbox.js"></script>
 <script src="components/FormName.js"></script>
 <script src="components/Modal.js"></script>
 <script src="components/ModuleCard.js"></script>
@@ -73,8 +83,6 @@
 <script src="components/ListPropertyCard.js"></script>
 <script src="components/alert.js"></script>
 <script src="components/formModel.js"></script>
-<script src="components/InputText.js"></script>
-<script src="components/InputCheckbox.js"></script>
 <script src="components/InputSelect.js"></script>
 <script src="components/FormProperty.js"></script>
 <script src="components/Navbar.js"></script>

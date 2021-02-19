@@ -2,13 +2,26 @@ Vue.component('EntityCard', {
         name: 'EntityCard',
         props: {
             entities: Array,
-            moduleName: String
+            moduleName: String,
+        },
+        computed: {
+            localSoftDelete: {
+                get() {
+                    if(this.selected != null){
+                        return this.entities[this.selected].softDelete
+                    }
+                    return false
+                },
+                set(val) {
+                    this.$emit("soft-delete-change", this.selected, val)
+                }
+            }
         },
         data() {
             return {
                 editing: null,
                 selected: null,
-                creating: null
+                creating: null,
             }
         },
         methods: {
@@ -50,24 +63,32 @@ Vue.component('EntityCard', {
 
                 <template v-else>
                     {{model.name}}
-                   
                 </template>
 
             </li>
         </ul>
         <div class="mt-2">
-         <button class="btn btn-sm btn-outline-danger float-right" @click="deleteEntity(selected)">
-         del
-         </button>
-         <button class="btn btn-sm btn-outline-primary mx-1 float-right" @click="editing=selected">
-         edit
-         </button>
-        <button class="btn btn-sm btn-outline-success" @click="creating=true">
-         Add
-        </button>
-        <div v-if="creating">
-            <form-name @update-name="createEntity" @close="creating= false"></form-name>
+        
+             <button class="btn btn-sm btn-outline-danger float-right" @click="deleteEntity(selected)">
+             del
+             </button>
+             
+             <button class="btn btn-sm btn-outline-primary mx-1 float-right" @click="editing=selected">
+             edit
+             </button>
+
+            <button class="btn btn-sm btn-outline-success" @click="creating=true">
+             Add
+            </button>
+            
+            <div v-if="creating">
+                <form-name @update-name="createEntity" @close="creating= false"></form-name>
+            </div>
+        
         </div>
+        <div>
+             <input-checkbox label="SoftDelete" name="softDelete" v-model="localSoftDelete" :errors="[]" >
+             </input-checkbox>
         </div>
     </div>
 </div>

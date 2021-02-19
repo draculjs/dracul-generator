@@ -3,7 +3,9 @@ const enumOptionsArrayList = require('../../utils/enumOptionsArrayList')
 module.exports = function (model) {
     let content =
 `const mongoose = require('mongoose'); 
-const softDelete = require('mongoose-softdelete')
+
+${(model.softDelete===true)?"const softDelete = require('mongoose-softdelete')":""}
+
 const mongoosePaginate = require('mongoose-paginate-v2');
 const uniqueValidator = require('mongoose-unique-validator');
 
@@ -16,7 +18,9 @@ ${fields(model.properties)}
 
 }${timestamp(model.timestamp)});
 
-${model.name}Schema.plugin(softDelete);
+
+${(model.softDelete===true)?model.name+"Schema.plugin(softDelete);":""}
+
 ${model.name}Schema.plugin(mongoosePaginate);
 ${model.name}Schema.plugin(uniqueValidator, {message: 'validation.unique'});
 

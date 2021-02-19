@@ -34,7 +34,7 @@ Vue.component('FormProperty', {
                 required: this.p.required ? this.p.required : false,
                 disabled: this.p.disabled ? this.p.disabled : false,
                 unique: this.p.unique ? this.p.unique : false,
-                default: this.p.default ? this.p.default : false,
+                default: this.p.default ? this.p.default : '',
                 search: this.p.search ? this.p.search : false,
                 i18n: {
                     en: this.p.i18n ? this.p.i18n.en : '',
@@ -127,7 +127,7 @@ Vue.component('FormProperty', {
                      <input-text label="Icon" name="icon" v-model="form.icon" :errors="errors"></input-text>
     </div>
     
-    <div class="col-12 py-1">
+    <div class="col-12 py-0">
         <div class="row">
           <div class="col-6 py-1">
                   <input-checkbox label="Disabled" name="disabled" v-model="form.disabled" :errors="errors"></input-checkbox>
@@ -139,7 +139,7 @@ Vue.component('FormProperty', {
         </div>
     </div>
     
-   <div class="col-12 py-1">
+   <div class="col-12 py-0">
         <div class="row">
           <div class="col-6 py-1">
                <input-checkbox label="Search" name="search" v-model="form.search" :errors="errors"></input-checkbox>

@@ -45,6 +45,11 @@ var app = new Vue({
                     return r.json()
                 }).then(j => {
                     this.models = j.models
+                    this.models.forEach((model,index)=> {
+                      if(this.models[index].softDelete === undefined){
+                          this.models[index].softDelete = false
+                      }
+                    })
                 }
             )
                 .catch(err => this.apiStatus = 'FAIL')
@@ -92,10 +97,14 @@ var app = new Vue({
             console.log('edit', index, name)
             this.models[index].name = name
         },
+        onSoftDeleteChange(index,val){
+            console.log('onSoftDeleteChange', index, name)
+            this.models[index].softDelete = val
+        },
         createModel(name) {
             let index = this.models.findIndex(m => m.name == name)
             if (index === -1) {
-                this.models.push({name: name, properties: []})
+                this.models.push({name: name, softDelete: false, properties: []})
             } else {
                 this.modelselected = index
                 alert('The model ' + name + ' already exists')

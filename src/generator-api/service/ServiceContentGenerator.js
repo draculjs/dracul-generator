@@ -18,7 +18,7 @@ export const find${capitalize(model.name)} = async function (id) {
 
 export const fetch${pluralize(capitalize(model.name))} = async function () {
     return new Promise((resolve, reject) => {
-        ${model.name}.find({}).isDeleted(false).${populate(model.properties)}exec((err, res) => (
+        ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec((err, res) => (
             err ? reject(err) : resolve(res)
         ));
     })
@@ -46,8 +46,7 @@ export const paginate${pluralize(capitalize(model.name))} = function ( pageNumbe
         }
     }
 
-
-    let query = {deleted: false, ...qs(search)}
+    ${model.softDelete?"let query = {deleted: false, ...qs(search)}":"let query = qs(search)"}
     let populate = ${populateArray(model.properties)}
     let sort = getSort(orderBy, orderDesc)
     let params = {page: pageNumber, limit: itemsPerPage, populate, sort}
@@ -107,7 +106,7 @@ export const update${capitalize(model.name)} = async function (authUser, id, {${
 export const delete${capitalize(model.name)} = function (id) {
     return new Promise((resolve, rejects) => {
         find${model.name}(id).then((doc) => {
-            doc.softdelete(function (err) {
+            doc.${model.softDelete?"softdelete":"delete"}(function (err) {
                 err ? rejects(err) : resolve({id: id, success: true})
             });
         })
