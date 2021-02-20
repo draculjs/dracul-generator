@@ -67,6 +67,9 @@ function getItems(model, column, moduleName) {
     return column.map(field => {
 
         switch(field.type){
+            case 'Int':
+            case 'Float':
+                return ` <show-field :value="String(item.${field.name})" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}')" icon="${field.icon}"/>`
             case 'Date':
                 return ` <show-field :value="getDateFormat(item.${field.name})" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}')" icon="${field.icon}"/>`
             case 'Datetime':
