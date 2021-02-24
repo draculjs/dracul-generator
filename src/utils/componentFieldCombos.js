@@ -61,6 +61,8 @@ module.exports.generateImportComponentCombos = function generateImportCombos(pro
             return `${capitalize(field.ref)}Combobox`
         } else if (field.type == "Enum" || field.type == "EnumList") {
             return `${capitalize(field.name)}Combobox`
+        }else if (field.type == "StringList"){
+            return 'ListCombobox'
         }
     }).join(',\n')
     if (combos.length > 0) {
@@ -129,6 +131,10 @@ function filterObjectIdAndEnumProperties(properties) {
         }
 
         if (field.type == 'Enum' || field.type == 'EnumList') {
+            return true
+        }
+
+        if (field.type == 'StringList') {
             return true
         }
 

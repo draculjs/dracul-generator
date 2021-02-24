@@ -4,6 +4,7 @@ const componentField = require('../../utils/componentField')
 const {generateImportCombos, generateImportCombosEnum, generateImportComponentCombos} = require('../../utils/componentFieldCombos')
 const importDayjsMixinIfDateExist = require('../../utils/importDayjsMixinIfDateExist')
 const dateExist = require('../../utils/dateExist')
+const StringListExist = require('../../utils/StringListExist')
 
 module.exports = function ({model, moduleName}) {
     let content =
@@ -17,7 +18,7 @@ module.exports = function ({model, moduleName}) {
 
 <script>
 
-    import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
+    import {InputErrorsByProps, RequiredRule ${StringListExist(model.properties)?', ListCombobox':''}} from '@dracul/common-frontend'
     
     ${generateImportCombos(model.properties)}
     ${generateImportCombosEnum(model.properties)}
@@ -25,7 +26,7 @@ module.exports = function ({model, moduleName}) {
 
     export default {
         name: "${model.name}Form",
-        mixins: [InputErrorsByProps, RequiredRule ${dateExist(model.properties)?', DayjsMixin':''}  ],
+        mixins: [InputErrorsByProps, RequiredRule ${dateExist(model.properties)?', DayjsMixin':''}   ],
         ${generateImportComponentCombos(model.properties)}
         props:{
             value: {

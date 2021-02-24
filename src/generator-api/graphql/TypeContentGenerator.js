@@ -106,6 +106,8 @@ function fields(properties, input = false) {
                 return ` ${field.name}: ${field.name}Enum${field.required ? "!" : ""}`
             case "EnumList":
                 return ` ${field.name}: [${field.name}Enum${field.required ? "!" : ""}]`
+            case "StringList":
+                return ` ${field.name}: [String${field.required ? "!" : ""}]`
             default:
                 return ` ${field.name}: ${field.type}${field.required ? "!" : ""}`
 
