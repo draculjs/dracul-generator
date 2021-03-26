@@ -18,6 +18,14 @@ function retorno(properties){
 
     return properties.map(field => {
 
+        if(field.type == 'MultiLang'){
+            return `${field.name}{
+                en
+                es
+                pt
+            }`
+        }
+
         if(field.name == 'createdBy' || field.name == 'updatedBy'){
             return `${field.name}{
                 id

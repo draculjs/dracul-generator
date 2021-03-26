@@ -91,6 +91,8 @@ function generateFormObjectFields(properties) {
 
     return propFiltered.map(field => {
         switch (field.type) {
+            case 'MultiLang':
+                return `${field.name}: {en:null, es:null, pt:null}`
             case 'Date':
                 return `${field.name}: null`
             case 'Datetime':

@@ -5,6 +5,8 @@ module.exports = function componentField(field, modelName, moduleName) {
     switch (field.type) {
         case 'String':
             return generateTextField(field, modelName, moduleName)
+        case 'MultiLang':
+            return generateMultiLangField(field, modelName, moduleName)
         case 'StringList':
             return generateTextListField(field, modelName, moduleName)
         case 'Int':
@@ -109,6 +111,15 @@ function generateComboField(field, modelName, moduleName) {
     let content = `
                    <v-col cols="12" sm="6">
                         <${kebabCase(field.ref)}-combobox v-model="form.${field.name}" :input-errors="inputErrors" />
+                   </v-col>    
+`
+    return content
+}
+
+function generateMultiLangField(field, modelName, moduleName) {
+    let content = `
+                   <v-col cols="12" sm="6">
+                        <multi-lang-field v-model="form.${field.name}" :input-errors="inputErrors" />
                    </v-col>    
 `
     return content

@@ -18,7 +18,7 @@ var app = new Vue({
             return null
         },
         getModelName() {
-            if (this.modelselected !== null) {
+            if (this.modelselected !== null && this.models[this.modelselected]) {
                 return this.models[this.modelselected].name
             }
             return null
@@ -115,6 +115,7 @@ var app = new Vue({
             this.models.splice(index, 1)
         },
         selectModel(index) {
+            this.propSelected = null
             this.modelselected = index
         },
         apply(property) {

@@ -58,6 +58,14 @@ function fields(properties) {
             case "Date":
             case "Datetime":
                 return ` ${field.name}: {type: Date, required: ${field.required}, unique: ${(field.unique === true)?true:false}}`
+            case "Mixed":
+                return ` ${field.name}: {type: mongoose.Schema.Types.Mixed, ref: "${field.ref}", required: ${field.required}, unique: ${(field.unique === true)?true:false}}`
+            case "MultiLang":
+                return ` ${field.name}: {
+            en: {type: String, required: false},
+            es: {type: String, required: false},
+            pt: {type: String, required: false},
+        }`
             default:
                 return ` ${field.name}: {type: ${field.type}, required: ${field.required}, unique: ${(field.unique === true)?true:false}}`
 

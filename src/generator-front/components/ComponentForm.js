@@ -3,6 +3,7 @@ const filterDateProperties = require('../../utils/filterDateProperties')
 const componentField = require('../../utils/componentField')
 const {generateImportCombos, generateImportCombosEnum, generateImportComponentCombos} = require('../../utils/componentFieldCombos')
 const importDayjsMixinIfDateExist = require('../../utils/importDayjsMixinIfDateExist')
+const importMultiLangIfExist = require('../../utils/importMultiLangIfExist')
 const dateExist = require('../../utils/dateExist')
 const StringListExist = require('../../utils/StringListExist')
 
@@ -23,6 +24,8 @@ module.exports = function ({model, moduleName}) {
     ${generateImportCombos(model.properties)}
     ${generateImportCombosEnum(model.properties)}
     ${importDayjsMixinIfDateExist(model.properties)}
+
+    ${importMultiLangIfExist(model.properties)}
 
     export default {
         name: "${model.name}Form",

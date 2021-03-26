@@ -21,7 +21,7 @@ Vue.component('FormProperty', {
     },
     data() {
         return {
-            options: ['String', 'StringList','Int', 'Float', 'Date', 'Datetime', 'Boolean', 'ObjectId', 'ObjectIdList', 'Enum', 'EnumList'],
+            options: ['String', 'StringList','Int', 'Float', 'Date', 'Datetime', 'Boolean', 'ObjectId', 'ObjectIdList', 'Enum', 'EnumList', 'Mixed', 'MultiLang'],
             errors: [],
             form: {
                 name: this.p.name ? this.p.name : '',
@@ -50,7 +50,6 @@ Vue.component('FormProperty', {
             deep: true,
             handler: function (val) {
                 this.form = Object.assign({}, val)
-                console.log(val.i18n)
                 this.$set(this.form, 'i18n', Object.assign({}, val.i18n))
                 this.$nextTick()
             }
