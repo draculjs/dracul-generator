@@ -101,10 +101,14 @@ var app = new Vue({
             console.log('onSoftDeleteChange', index, name)
             this.models[index].softDelete = val
         },
+        onTimestampChange(index,val){
+            console.log('onTimestampChange', index, name)
+            this.models[index].timestamp = val
+        },
         createModel(name) {
             let index = this.models.findIndex(m => m.name == name)
             if (index === -1) {
-                this.models.push({name: name, softDelete: false, properties: []})
+                this.models.push({name: name, softDelete: false, timestamp:false, properties: []})
             } else {
                 this.modelselected = index
                 alert('The model ' + name + ' already exists')

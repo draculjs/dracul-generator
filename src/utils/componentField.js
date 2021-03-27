@@ -119,7 +119,13 @@ function generateComboField(field, modelName, moduleName) {
 function generateMultiLangField(field, modelName, moduleName) {
     let content = `
                    <v-col cols="12" sm="6">
-                        <multi-lang-field v-model="form.${field.name}" :input-errors="inputErrors" />
+                        <multi-lang-subform 
+                        field="${field.name}" 
+                        v-model="form.${field.name}" 
+                        :input-errors="inputErrors" 
+                        :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
+                        :placeholder="$t('${getI18nKey(moduleName, modelName, field.name, true)}')" 
+                        />
                    </v-col>    
 `
     return content

@@ -88,6 +88,12 @@ function generateFormObjectFields(properties) {
 
     return propFiltered.map(field => {
         switch(field.type){
+            case 'MultiLang':
+                return `${field.name}: {
+          en: this.item.title.en,
+          es: this.item.title.es,
+          pt: this.item.title.pt
+        }`
             case 'Date':
                 return `${field.name}: this.item.${field.name}?Dayjs(parseInt(this.item.${field.name})):null`
             case 'Datetime':

@@ -137,6 +137,12 @@ module.exports = function ({model, moduleName}) {
 function headers(properties, modelName, moduleName) {
 
     let content = properties.map(field => {
+        if(field.type== "MultiLang"){
+            return `{text: this.$t('${getI18nKey(moduleName, modelName, field.name, true)}') + '-EN', value: '${field.name}.en'},
+            {text: this.$t('${getI18nKey(moduleName, modelName, field.name, true)}')+ '-ES', value: '${field.name}.es'},
+            {text: this.$t('${getI18nKey(moduleName, modelName, field.name, true)}')+ '-PT', value: '${field.name}.pt'}
+            `
+        }
         return `{text: this.$t('${getI18nKey(moduleName, modelName, field.name, true)}'), value: '${field.name}'}`
     }).join(',\n                    ')
     return content

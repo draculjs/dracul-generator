@@ -80,7 +80,10 @@ return content
 function provider(field){
     if(field.ref == 'User'){
         return `import {userProvider} from "@dracul/user-frontend"`
-    }else{
+    } else if(field.ref == 'Role'){
+        return `import {roleProvider} from "@dracul/user-frontend"`
+    }
+    else{
         return `import ${capitalize(field.ref)}Provider from "../../../providers/${capitalize(field.ref)}Provider"`
     }
 }
@@ -91,6 +94,12 @@ function fetchFunction(field){
         return `this.loading= true
               userProvider.users().then(r => {
                     this.items = r.data.users
+                }).catch(err => console.error(err))
+                .finally(()=> this.loading = false)`
+    }else if(field.ref == 'Role'){
+        return `this.loading= true
+              roleProvider.roles().then(r => {
+                    this.items = r.data.roles
                 }).catch(err => console.error(err))
                 .finally(()=> this.loading = false)`
     }else{

@@ -15,6 +15,17 @@ Vue.component('EntityCard', {
                 set(val) {
                     this.$emit("soft-delete-change", this.selected, val)
                 }
+            },
+            localTimestamp: {
+                get() {
+                    if(this.selected != null){
+                        return this.entities[this.selected].timestamp
+                    }
+                    return false
+                },
+                set(val) {
+                    this.$emit("timestamp-change", this.selected, val)
+                }
             }
         },
         data() {
@@ -88,6 +99,8 @@ Vue.component('EntityCard', {
         </div>
         <div>
              <input-checkbox label="SoftDelete" name="softDelete" v-model="localSoftDelete" :errors="[]" >
+             </input-checkbox>
+                <input-checkbox label="Timestamp" name="Timestamp" v-model="localTimestamp" :errors="[]" >
              </input-checkbox>
         </div>
     </div>

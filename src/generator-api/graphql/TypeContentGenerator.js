@@ -111,6 +111,9 @@ function fields(properties, input = false) {
             case "Mixed":
                 return ` ${field.name}: JSON${field.required ? "!" : ""}`
             case "MultiLang":
+                if (input) {
+                    return ` ${field.name}: MultiLangInput${field.required ? "!" : ""}`
+                }
                 return ` ${field.name}: MultiLang${field.required ? "!" : ""}`
             default:
                 return ` ${field.name}: ${field.type}${field.required ? "!" : ""}`

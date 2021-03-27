@@ -41,7 +41,7 @@ function variables(properties){
             case 'Mixed':
                 return `$${field.name}:JSON${field.required?'!':''}`
             case 'MultiLang':
-                return `$${field.name}:MultiLang${field.required?'!':''}`
+                return `$${field.name}:MultiLangInput${field.required?'!':''}`
             default:
                 return `$${field.name}:${field.type}${field.required?'!':''}`
         }
@@ -69,6 +69,14 @@ function retorno(properties){
 
 
     return properties.map(field => {
+
+        if(field.type == 'MultiLang'){
+            return `${field.name}{
+                en
+                es
+                pt
+            }`
+        }
 
         if(field.name == 'createdBy' || field.name == 'updatedBy'){
             return `${field.name}{

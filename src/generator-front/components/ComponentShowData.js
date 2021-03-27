@@ -67,6 +67,10 @@ function getItems(model, column, moduleName) {
     return column.map(field => {
 
         switch(field.type){
+            case 'MultiLang':
+                return ` <show-field :value="item.${field.name}.en" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}') + '(en)'" icon="${field.icon}"/> 
+                <show-field :value="item.${field.name}.es" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}') + '(es)'" icon="${field.icon}"/> 
+                <show-field :value="item.${field.name}.pt" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}') + '(pt)'" icon="${field.icon}"/>`
             case 'Int':
             case 'Float':
                 return ` <show-field :value="String(item.${field.name})" :label="$t('${getI18nKey(moduleName,model.name, field.name,true)}')" icon="${field.icon}"/>`

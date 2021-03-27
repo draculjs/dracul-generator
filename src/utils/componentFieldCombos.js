@@ -52,7 +52,18 @@ module.exports.generateImportCombosEnum = function generateImportCombos(properti
     }).join('\n')
 }
 
-module.exports.generateImportComponentCombos = function generateImportCombos(properties) {
+module.exports.generateImportComponent = function generateImportComponent(properties) {
+
+    function getMultilang(properties) {
+
+        let propMultiLang = properties.filter(p => p.type == "MultiLang")
+
+        if (propMultiLang.length > 0) {
+            return "MultiLangSubform"
+        } else {
+            return ""
+        }
+    }
 
     let propFiltered = filterObjectIdAndEnumProperties(properties);
 
@@ -61,13 +72,18 @@ module.exports.generateImportComponentCombos = function generateImportCombos(pro
             return `${capitalize(field.ref)}Combobox`
         } else if (field.type == "Enum" || field.type == "EnumList") {
             return `${capitalize(field.name)}Combobox`
-        }else if (field.type == "StringList"){
+        } else if (field.type == "StringList") {
             return 'ListCombobox'
         }
     }).join(',\n')
+
     if (combos.length > 0) {
-        return "components: {" + combos + "},"
+        return "components: {" + combos + "," +getMultilang(properties) + "},"
+    }else if(getMultilang(properties)){
+        return "components: {" + getMultilang(properties) + "},"
     }
+
+
     return ''
 }
 
