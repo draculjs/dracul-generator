@@ -9,7 +9,8 @@ const pluralize = require("../utils/pluralize");
 const OUTPUT_PATH = './output/front/'
 
 //Generators
-const I18nMessages = require("./i18n/I18nMessages");
+const I18nMessages = require("./i18n/messages/I18nMessages");
+const I18nIndex = require("./i18n/I18nIndex");
 const Routes = require("./routes/Routes");
 const Provider = require("./providers/Provider");
 const PageCrud = require("./pages/PageCrud");
@@ -52,7 +53,11 @@ class FrontGeneratorManager {
 
 
     I18N_PATH() {
-        return this.BASE_PATH() + '/i18n/messages'
+        return this.BASE_PATH() + '/i18n/'
+    }
+
+    I18N_MESSAGES_PATH() {
+        return this.BASE_PATH() + '/i18n/messages/'
     }
 
     ROUTES_PATH() {
@@ -82,8 +87,13 @@ class FrontGeneratorManager {
     }
 
     generateI18n() {
-        let path = this.I18N_PATH() + '/index.js'
-        writeFile(path, I18nMessages, this.source, 'i18n')
+        this.source.models.forEach(model => {
+            let path = this.I18N_MESSAGES_PATH() + model.name + 'Messages.js'
+            writeFile(path, I18nMessages, {model: model, moduleName: this.source.module}, 'i18nMessages')
+        })
+        let path = this.I18N_PATH() + 'index.js'
+        writeFile(path, I18nIndex, this.source, 'i18nIndex')
+
     }
 
     generateRoutes() {

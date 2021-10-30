@@ -74,9 +74,9 @@ export const create${capitalize(model.name)} = async function (authUser, {${para
         
             if (error) {
                 if (error.name == "ValidationError") {
-                    rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
-                rejects(error)
+                return rejects(error)
             }    
         
             ${resolvePopulate(model.properties)}
@@ -93,9 +93,11 @@ export const update${capitalize(model.name)} = async function (authUser, id, {${
             
             if (error) {
                 if (error.name == "ValidationError") {
-                    rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                 return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                
                 }
-                rejects(error)
+                return rejects(error)
+                
             } 
         
             ${resolvePopulate(model.properties)}

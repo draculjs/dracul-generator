@@ -1,21 +1,21 @@
-const descapitalize = require('../../utils/descapitalize')
+const descapitalize = require('../../../utils/descapitalize')
 
-module.exports = function (source) {
+module.exports = function ({model, moduleName}) {
     let content = `
 const messages = {
     en: {
-       ${descapitalize(source.module)}: {
-          ${getModelMessages(source.models, 'en')}
+       ${descapitalize(moduleName)}: {
+          ${getModelMessages(model, 'en')}
        }
     },
     es: {
-       ${descapitalize(source.module)}: {
-          ${getModelMessages(source.models, 'es')}
+       ${descapitalize(moduleName)}: {
+          ${getModelMessages(model, 'es')}
        }
     },
     pt: {
-       ${descapitalize(source.module)}: {
-          ${getModelMessages(source.models, 'pt')}
+       ${descapitalize(moduleName)}: {
+          ${getModelMessages(model, 'pt')}
        }
     }
 }
@@ -26,20 +26,20 @@ export default messages
 }
 
 
-function getModelMessages(models, lang) {
-    return models.map(model => {
-        return `${descapitalize(model.name)}: { 
+function getModelMessages(model, lang) {
+
+    return `${descapitalize(model.name)}: { 
           ${getTitlesMessages(model, lang)},
-          labels: {
-          ${getPropertiesMessages(model.properties, lang)}
-          },
+            labels: {
+              ${getPropertiesMessages(model.properties, lang)}
+            },
           ${geti18nMessages(model, lang)}
           }`
-    }).join(",\n")
+
 }
 
 function geti18nMessages(model, lang) {
-    if(model.i18n){
+    if (model.i18n) {
         return aditionals.map(aditional => {
             return `  ${getPropertyMessage(aditional, lang)}`
         }).join(",\n          ")
@@ -51,7 +51,7 @@ function geti18nMessages(model, lang) {
 function getPropertiesMessages(properties, lang) {
     return properties.map(property => {
         return `  ${getPropertyMessage(property, lang)}`
-    }).join(",\n          ")
+    }).join(",\n              ")
 }
 
 function getPropertyMessage(property, lang) {
@@ -72,24 +72,24 @@ function getTitlesMessages(model, lang) {
         es: {
             title: 'Administración de ' + model.name,
             subtitle: 'Ver, buscar, crear, editar, y borrar ' + model.name,
-            creating: 'Creando '+ model.name,
-            editing: 'Modificando '+ model.name,
-            deleting: 'Eliminando '+ model.name,
-            showing: 'Detalles de '+ model.name,
+            creating: 'Creando ' + model.name,
+            editing: 'Modificando ' + model.name,
+            deleting: 'Eliminando ' + model.name,
+            showing: 'Detalles de ' + model.name,
         },
         pt: {
             title: 'Administração de ' + model.name,
             subtitle: 'Ver, buscar, criar, editar e usar ' + model.name,
-            creating: 'Criando '+ model.name,
-            editing: 'Edição '+ model.name,
-            deleting: 'Apagando '+ model.name,
-            showing: 'Detalhes do '+ model.name,
+            creating: 'Criando ' + model.name,
+            editing: 'Edição ' + model.name,
+            deleting: 'Apagando ' + model.name,
+            showing: 'Detalhes do ' + model.name,
         },
     }
 
-    return `   title: '${ titles[lang].title}',
-            subtitle: '${ titles[lang].subtitle}',
-            creating: '${titles[lang].creating }',
+    return `  title: '${titles[lang].title}',
+            subtitle: '${titles[lang].subtitle}',
+            creating: '${titles[lang].creating}',
             editing: '${titles[lang].editing}',
             deleting: '${titles[lang].deleting}',
             showing: '${titles[lang].showing}'`
