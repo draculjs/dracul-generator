@@ -80,6 +80,7 @@ class FrontGeneratorManager {
         createDir(OUTPUT_PATH)
         createDir(this.BASE_PATH())
         createDir(this.I18N_PATH())
+        createDir(this.I18N_MESSAGES_PATH())
         createDir(this.ROUTES_PATH())
         createDir(this.PAGES_PATH())
         createDir(this.PROVIDERS_PATH())
@@ -87,12 +88,16 @@ class FrontGeneratorManager {
     }
 
     generateI18n() {
+
+
         this.source.models.forEach(model => {
             let path = this.I18N_MESSAGES_PATH() + model.name + 'Messages.js'
             writeFile(path, I18nMessages, {model: model, moduleName: this.source.module}, 'i18nMessages')
         })
+
         let path = this.I18N_PATH() + 'index.js'
         writeFile(path, I18nIndex, this.source, 'i18nIndex')
+
 
     }
 
@@ -109,56 +114,64 @@ class FrontGeneratorManager {
         })
     }
 
+
+    generateGqlDir() {
+        this.source.models.forEach(model => {
+            createDir(this.GQL_PATH() + model.name)
+        })
+
+    }
+
     generateGqlAll() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Fetch'
+            let name = 'fetch' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlFetchAll, model, fileName)
         })
     }
 
     generateGqlById() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Find'
+            let name = 'find' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlFetchByID, model, fileName)
         })
     }
 
     generateGqlPaginate() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Paginate'
+            let name = 'paginate' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlPaginate, model, fileName)
         })
     }
 
     generateGqlCreate() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Create'
+            let name = 'create' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlCreate, model, fileName)
         })
     }
 
     generateGqlUpdate() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Update'
+            let name = 'update' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlUpdate, model, fileName)
         })
     }
 
     generateGqlDelete() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Delete'
+            let name = 'delete' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlDelete, model, fileName)
         })
     }
@@ -169,15 +182,15 @@ class FrontGeneratorManager {
                 if (field.findby) {
                     let name = descapitalize(model.name) + 'By' + capitalize(field.name) + '.graphql'
                     let fileName = name + '.graphql'
-                    let filePath = this.GQL_PATH() + fileName
-                    writeFile(filePath, GqlFetchBySomething, {model,field}, fileName)
+                    let filePath = this.GQL_PATH() + model.name + '/' + fileName
+                    writeFile(filePath, GqlFetchBySomething, {model, field}, fileName)
                 }
             })
         })
     }
 
-    PAGE_MANAGEMENT_PATH(model){
-        if(model && model.name){
+    PAGE_MANAGEMENT_PATH(model) {
+        if (model && model.name) {
             return this.PAGES_PATH() + model.name + 'ManagementPage/'
         }
         throw new Error("model.name is required")
@@ -212,7 +225,11 @@ class FrontGeneratorManager {
                     let name = capitalize(field.ref) + 'Combobox'
                     let fileName = name + '.vue'
                     let filePath = dirPath + fileName
-                    writeFile(filePath, ComponentComboObjectId, {field: field, model: model, moduleName: this.source.module }, fileName)
+                    writeFile(filePath, ComponentComboObjectId, {
+                        field: field,
+                        model: model,
+                        moduleName: this.source.module
+                    }, fileName)
                 }
 
                 if (field.type == 'Enum' || field.type == 'EnumList') {
@@ -221,7 +238,11 @@ class FrontGeneratorManager {
                     let name = capitalize(field.name) + 'Combobox'
                     let fileName = name + '.vue'
                     let filePath = dirPath + fileName
-                    writeFile(filePath, ComponentComboEnum, {field: field, model: model, moduleName: this.source.module }, fileName)
+                    writeFile(filePath, ComponentComboEnum, {
+                        field: field,
+                        model: model,
+                        moduleName: this.source.module
+                    }, fileName)
                 }
             })
         })

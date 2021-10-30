@@ -1,5 +1,5 @@
 const kebabCase = require('../../utils/kebabCase')
-const descapitalize = require('../../utils/descapitalize')
+const capitalize = require('../../utils/capitalize')
 const filterBackendProperties = require('../../utils/filterBackendProperties')
 const importDayjsIfDateExist = require('../../utils/importDayjsIfDateExist')
 const getI18nKey = require('../../utils/getI18nKey')
@@ -54,9 +54,9 @@ module.exports = function ({model,moduleName}) {
             create() {
                 if (this.$refs.form.validate()) {
                     this.loading = true
-                    ${model.name}Provider.create${model.name}(this.form).then(r => {
+                    ${model.name}Provider.create${capitalize(model.name)}(this.form).then(r => {
                             if (r) {
-                                this.$emit('itemCreated',r.data.${descapitalize(model.name)}Create)
+                                this.$emit('itemCreated',r.data.create${capitalize(model.name)})
                                 this.$emit('close')
                             }
                         }

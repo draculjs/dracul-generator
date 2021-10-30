@@ -1,6 +1,4 @@
 const capitalize = require('../../utils/capitalize')
-const descapitalize = require('../../utils/descapitalize')
-const pluralize = require('../../utils/pluralize')
 const getI18nKey = require('../../utils/getI18nKey')
 
 module.exports = function ({field, model, moduleName}) {
@@ -104,8 +102,8 @@ function fetchFunction(field){
                 .finally(()=> this.loading = false)`
     }else{
         return `this.loading= true
-                ${capitalize(field.ref)}Provider.fetch${capitalize(pluralize(field.ref))}().then(r => {
-                    this.items = r.data.${descapitalize(field.ref)}Fetch
+                ${capitalize(field.ref)}Provider.fetch${capitalize(field.ref)}().then(r => {
+                    this.items = r.data.fetch${capitalize(field.ref)}
                 }).catch(err => console.error(err))
                 .finally(()=> this.loading = false)`
     }

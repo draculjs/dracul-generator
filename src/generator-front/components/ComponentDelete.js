@@ -61,7 +61,7 @@ module.exports = function ({model, moduleName}) {
                 this.loading = true
                 ${model.name}Provider.delete${capitalize(model.name)}(this.item.id).then(result => {
                             if (result.data.${descapitalize(model.name)}Delete.success) {
-                                this.$emit('itemDeleted',result.data.${descapitalize(model.name)}Delete)
+                                this.$emit('itemDeleted',result.data.delete${capitalize(model.name)})
                                 this.$emit('close')
                             }else{
                                 this.errorMessage = 'Error on Delete'

@@ -109,15 +109,15 @@ module.exports = function ({model, moduleName}) {
             },
             fetch() {
                 this.loading = true
-                ${model.name}Provider.paginate${pluralize(capitalize(model.name))}(
+                ${model.name}Provider.paginate${capitalize(model.name)}(
                     this.pageNumber, 
                     this.itemsPerPage,
                     this.search,
                     this.getOrderBy, 
                     this.getOrderDesc
                 ).then(r => {
-                    this.items = r.data.${descapitalize(model.name)}Paginate.items
-                    this.totalItems = r.data.${descapitalize(model.name)}Paginate.totalItems
+                    this.items = r.data.paginate${capitalize(model.name)}.items
+                    this.totalItems = r.data.paginate${capitalize(model.name)}.totalItems
                 }).catch(err => {
                     console.error(err)
                 }).finally(() => this.loading = false)

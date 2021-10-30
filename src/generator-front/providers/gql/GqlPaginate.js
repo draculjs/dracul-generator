@@ -1,9 +1,9 @@
-const descapitalize = require('../../../utils/descapitalize')
+const capitalize = require('../../../utils/capitalize')
 
 module.exports = function (model) {
 let content =
-`query ${descapitalize(model.name)}Paginate( $pageNumber: Int, $itemsPerPage:Int, $search: String, $orderBy: String, $orderDesc: Boolean){
-    ${descapitalize(model.name)}Paginate( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, orderBy: $orderBy, orderDesc: $orderDesc){
+`query paginate${capitalize(model.name)}( $pageNumber: Int, $itemsPerPage:Int, $search: String, $orderBy: String, $orderDesc: Boolean){
+    paginate${capitalize(model.name)}( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, orderBy: $orderBy, orderDesc: $orderDesc){
         totalItems
         page
         items{

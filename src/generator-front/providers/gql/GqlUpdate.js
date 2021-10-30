@@ -1,9 +1,9 @@
-const descapitalize = require('../../../utils/descapitalize')
+const capitalize = require('../../../utils/capitalize')
 
 module.exports = function (model) {
 let content =
-`mutation ${descapitalize(model.name)}Update($id: ID!, ${variables(model.properties)}){
-    ${descapitalize(model.name)}Update(id: $id, input: {${input(model.properties)} }){
+`mutation update${capitalize(model.name)}($id: ID!, $input: ${model.name}Input){
+    update${capitalize(model.name)}(id: $id, input: $input){
         id
         ${retorno(model.properties)}
     }
