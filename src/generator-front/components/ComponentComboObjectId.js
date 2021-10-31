@@ -82,7 +82,7 @@ function provider(field){
         return `import {roleProvider} from "@dracul/user-frontend"`
     }
     else{
-        return `import ${capitalize(field.ref)}Provider from "../../../providers/${capitalize(field.ref)}Provider"`
+        return `import ${capitalize(field.ref)}Provider from "../../../../providers/${capitalize(field.ref)}Provider"`
     }
 }
 

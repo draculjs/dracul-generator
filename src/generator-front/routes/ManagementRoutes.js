@@ -13,12 +13,12 @@ export default routes;
 
 function getImportPages(models) {
     return models.map(model => {
-        return `import ${model.name + 'ManagementPage'} from '../pages/${model.name + 'ManagementPage'}'`
+        return `import ${model.name + 'Page'} from '../pages/crud/${model.name + 'Page'}'`
     }).join("\n")
 }
 
 function getRoutesPages(models) {
     return models.map(model => {
-        return ` {name: '${model.name + 'ManagementPage'}', path: '/${model.name.toLowerCase()}-management', component: ${model.name + 'ManagementPage'}}`
+        return ` {name: '${model.name + 'Page'}', path: '/crud/${model.name.toLowerCase()}', component: ${model.name + 'Page'}}`
     }).join(",\n")
 }

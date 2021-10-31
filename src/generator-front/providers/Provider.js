@@ -18,10 +18,10 @@ class ${model.name}Provider {
         return graphqlClient.query({query: require('./gql/${model.name}/fetch${capitalize(model.name)}.graphql')})
     }
     
-    paginate${capitalize(model.name)}(pageNumber, itemsPerPage, search = null,  orderBy = null, orderDesc = false) {
+    paginate${capitalize(model.name)}(pageNumber, itemsPerPage, search = null, filters = null,  orderBy = null, orderDesc = false) {
         return graphqlClient.query({
             query: require('./gql/${model.name}/paginate${capitalize(model.name)}.graphql'),
-            variables: {pageNumber, itemsPerPage, search, orderBy, orderDesc},
+            variables: {pageNumber, itemsPerPage, search, filters, orderBy, orderDesc},
             fetchPolicy: "network-only"
         })
     }

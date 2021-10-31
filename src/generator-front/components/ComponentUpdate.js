@@ -20,7 +20,7 @@ module.exports = function ({model,moduleName}) {
 
 <script>
 
-    import ${model.name}Provider from "../../../providers/${model.name}Provider";
+    import ${model.name}Provider from "../../../../providers/${model.name}Provider";
     
     import {CrudUpdate, ClientError} from '@dracul/common-frontend'
     
@@ -99,7 +99,7 @@ function generateFormObjectFields(properties) {
             case 'Datetime':
                 return `${field.name}: this.item.${field.name}?Dayjs(parseInt(this.item.${field.name})):null`
             case 'ObjectId':
-                return `${field.name}: this.item.${field.name}.id`
+                return `${field.name}: this.item.${field.name} ? this.item.${field.name}.id : null`
             case 'ObjectIdList':
                 return `${field.name}: this.item.${field.name}.map(i=> i.id?i.id:i)`
             default:

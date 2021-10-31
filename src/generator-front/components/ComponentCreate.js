@@ -20,7 +20,7 @@ module.exports = function ({model,moduleName}) {
 
 <script>
 
-    import ${model.name}Provider from "../../../providers/${model.name}Provider";
+    import ${model.name}Provider from "../../../../providers/${model.name}Provider";
     
     import {CrudCreate, ClientError} from '@dracul/common-frontend'
     

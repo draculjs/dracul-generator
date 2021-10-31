@@ -2,8 +2,8 @@ const capitalize = require('../../../utils/capitalize')
 
 module.exports = function (model) {
 let content =
-`query paginate${capitalize(model.name)}( $pageNumber: Int, $itemsPerPage:Int, $search: String, $orderBy: String, $orderDesc: Boolean){
-    paginate${capitalize(model.name)}( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, orderBy: $orderBy, orderDesc: $orderDesc){
+`query paginate${capitalize(model.name)}( $pageNumber: Int, $itemsPerPage:Int, $search: String, $filters: [FilterInput], $orderBy: String, $orderDesc: Boolean){
+    paginate${capitalize(model.name)}( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, filters: $filters, orderBy: $orderBy, orderDesc: $orderDesc){
         totalItems
         page
         items{
@@ -41,7 +41,7 @@ function retorno(properties){
         if(field.type == 'ObjectId' || field.type == 'ObjectIdList'){
             return `${field.name}{
                 id
-                ${field.refDisplayField}
+                ${field.refDisplayField != 'id' ? field.refDisplayField : ''}
             }`
         }
 

@@ -23,7 +23,7 @@ export const fetch${capitalize(model.name)} = async function () {
     })
 }
 
-export const paginate${capitalize(model.name)} = function ( pageNumber = 1, itemsPerPage = 5, search = null, orderBy = null, orderDesc = false) {
+export const paginate${capitalize(model.name)} = function ( pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
 
     function qs(search) {
         let qs = {}
@@ -34,6 +34,42 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
                 ]
             }
         }
+        
+        if(filters){
+        
+            filters.forEach(filter => {
+                switch(filter.operator){
+                    case '=':
+                    case 'eq':
+                        qs[filter.field] = {$eq: filter.value}
+                        break;
+                    case 'contain':
+                    case 'regex':
+                        qs[filter.field] = {$regex: filter.value}
+                        break;
+                    case '>':
+                    case 'gt':
+                        qs[filter.field] = {$gt: filter.value}
+                        break;    
+                    case '<':
+                    case 'lt':
+                        qs[filter.field] = {$lt: filter.value}
+                        break;    
+                    case '>=':
+                    case 'gte':
+                        qs[filter.field] = {$gte: filter.value}
+                        break;    
+                    case '<=':
+                    case 'lte':
+                        qs[filter.field] = {$lte: filter.value}
+                        break;          
+                    default:
+                        qs[filter.field] = {$eq: filter.value}
+                }
+            })
+        
+        }
+        
         return qs
     }
     

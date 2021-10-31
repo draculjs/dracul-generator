@@ -29,10 +29,10 @@ export default {
             if(!rbac.isAllowed(user.id, ${model.name.toUpperCase()}_SHOW)) throw new ForbiddenError("Not Authorized")
             return fetch${capitalize(model.name)}()
         },
-        paginate${capitalize(model.name)}: (_, {pageNumber, itemsPerPage, search, orderBy, orderDesc}, {user,rbac}) => {
+        paginate${capitalize(model.name)}: (_, {pageNumber, itemsPerPage, search, filters, orderBy, orderDesc}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ${model.name.toUpperCase()}_SHOW)) throw new ForbiddenError("Not Authorized")
-            return paginate${capitalize(model.name)}(pageNumber, itemsPerPage, search, orderBy, orderDesc)
+            return paginate${capitalize(model.name)}(pageNumber, itemsPerPage, search, filters, orderBy, orderDesc)
         },
         ${findBy(model)}
     },

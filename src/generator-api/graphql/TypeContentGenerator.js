@@ -23,7 +23,7 @@ type ${model.name}Paginated{
 type Query {
     find${capitalize(model.name)}(id:ID!): ${model.name}
     fetch${capitalize(model.name)}: [${model.name}]
-    paginate${capitalize(model.name)}( pageNumber: Int, itemsPerPage: Int, search: String, orderBy: String, orderDesc: Boolean): ${model.name}Paginated  
+    paginate${capitalize(model.name)}( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): ${model.name}Paginated  
     ${findBy(model)}
     
 }

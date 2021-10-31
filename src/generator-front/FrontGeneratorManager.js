@@ -11,7 +11,8 @@ const OUTPUT_PATH = './output/front/'
 //Generators
 const I18nMessages = require("./i18n/messages/I18nMessages");
 const I18nIndex = require("./i18n/I18nIndex");
-const Routes = require("./routes/Routes");
+const ManagementRoutes = require("./routes/ManagementRoutes");
+const IndexRoute = require("./routes/IndexRoute");
 const Provider = require("./providers/Provider");
 const PageCrud = require("./pages/PageCrud");
 const ComponentCrud = require("./components/ComponentCrud");
@@ -68,6 +69,10 @@ class FrontGeneratorManager {
         return this.BASE_PATH() + '/pages/'
     }
 
+    PAGES_CRUD_PATH() {
+        return this.BASE_PATH() + '/pages/crud/'
+    }
+
     PROVIDERS_PATH() {
         return this.BASE_PATH() + '/providers/'
     }
@@ -83,6 +88,7 @@ class FrontGeneratorManager {
         createDir(this.I18N_MESSAGES_PATH())
         createDir(this.ROUTES_PATH())
         createDir(this.PAGES_PATH())
+        createDir(this.PAGES_CRUD_PATH())
         createDir(this.PROVIDERS_PATH())
         createDir(this.GQL_PATH())
     }
@@ -101,9 +107,14 @@ class FrontGeneratorManager {
 
     }
 
-    generateRoutes() {
+    generateManagementRoutes() {
+        let path = this.ROUTES_PATH() + '/'+ this.source.module + 'ManagementRoutes.js'
+        writeFile(path, ManagementRoutes, this.source.models, 'Routes')
+    }
+
+    generateIndexRoute() {
         let path = this.ROUTES_PATH() + '/index.js'
-        writeFile(path, Routes, this.source.models, 'Routes')
+        writeFile(path, IndexRoute, this.source.module, 'Routes')
     }
 
 
@@ -189,24 +200,24 @@ class FrontGeneratorManager {
         })
     }
 
-    PAGE_MANAGEMENT_PATH(model) {
+    PAGE_CRUD_FINALPATH(model) {
         if (model && model.name) {
-            return this.PAGES_PATH() + model.name + 'ManagementPage/'
+            return this.PAGES_CRUD_PATH() + model.name + 'Page/'
         }
         throw new Error("model.name is required")
     }
 
     generatePages() {
         this.source.models.forEach(model => {
-            createDir(this.PAGE_MANAGEMENT_PATH(model))
-            let path = this.PAGE_MANAGEMENT_PATH(model) + 'index.vue'
+            createDir(this.PAGE_CRUD_FINALPATH(model))
+            let path = this.PAGE_CRUD_FINALPATH(model) + 'index.vue'
             writeFile(path, PageCrud, model, 'Page')
         })
     }
 
     generateForm() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Form/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Form/'
             createDir(dirPath)
             let name = model.name + 'Form'
             let fileName = name + '.vue'
@@ -220,7 +231,7 @@ class FrontGeneratorManager {
         this.source.models.forEach(model => {
             model.properties.forEach(field => {
                 if (field.type == 'ObjectId' || field.type == 'ObjectIdList') {
-                    let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Form/'
+                    let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Form/'
                     createDir(dirPath)
                     let name = capitalize(field.ref) + 'Combobox'
                     let fileName = name + '.vue'
@@ -233,7 +244,7 @@ class FrontGeneratorManager {
                 }
 
                 if (field.type == 'Enum' || field.type == 'EnumList') {
-                    let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Form/'
+                    let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Form/'
                     createDir(dirPath)
                     let name = capitalize(field.name) + 'Combobox'
                     let fileName = name + '.vue'
@@ -250,7 +261,7 @@ class FrontGeneratorManager {
 
     generateCreate() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Create/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Create/'
             createDir(dirPath)
             let name = model.name + 'Create'
             let fileName = name + '.vue'
@@ -262,7 +273,7 @@ class FrontGeneratorManager {
 
     generateUpdate() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Update/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Update/'
             createDir(dirPath)
             let name = model.name + 'Update'
             let fileName = name + '.vue'
@@ -274,7 +285,7 @@ class FrontGeneratorManager {
 
     generateDelete() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Delete/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Delete/'
             createDir(dirPath)
             let name = model.name + 'Delete'
             let fileName = name + '.vue'
@@ -286,7 +297,7 @@ class FrontGeneratorManager {
 
     generateShowData() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Show/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Show/'
             createDir(dirPath)
             let name = model.name + 'ShowData'
             let fileName = name + '.vue'
@@ -297,7 +308,7 @@ class FrontGeneratorManager {
 
     generateShow() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Show/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Show/'
             createDir(dirPath)
             let name = model.name + 'Show'
             let fileName = name + '.vue'
@@ -309,7 +320,7 @@ class FrontGeneratorManager {
 
     generateList() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'List/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'List/'
             createDir(dirPath)
             let name = model.name + 'List'
             let fileName = name + '.vue'
@@ -321,7 +332,7 @@ class FrontGeneratorManager {
 
     generateCrud() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Crud/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Crud/'
             createDir(dirPath)
             let name = model.name + 'Crud'
             let fileName = name + '.vue'
