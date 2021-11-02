@@ -1,6 +1,5 @@
 const capitalize = require('../../utils/capitalize')
 const pluralize = require('../../utils/pluralize')
-const descapitalize = require('../../utils/descapitalize')
 
 module.exports = function (model) {
 let content =
@@ -10,42 +9,42 @@ class ${model.name}Provider {
 
     find${capitalize(model.name)}(id) {
         return graphqlClient.query({
-            query: require('./gql/${descapitalize(model.name)}Find.graphql'),
+            query: require('./gql/${model.name}/find${capitalize(model.name)}.graphql'),
             variables: {id:id}
         })
     }
 
-    fetch${pluralize(capitalize(model.name))}() {
-        return graphqlClient.query({query: require('./gql/${descapitalize(model.name)}Fetch.graphql')})
+    fetch${capitalize(model.name)}() {
+        return graphqlClient.query({query: require('./gql/${model.name}/fetch${capitalize(model.name)}.graphql')})
     }
     
-    paginate${pluralize(capitalize(model.name))}(pageNumber, itemsPerPage, search = null,  orderBy = null, orderDesc = false) {
+    paginate${capitalize(model.name)}(pageNumber, itemsPerPage, search = null, filters = null,  orderBy = null, orderDesc = false) {
         return graphqlClient.query({
-            query: require('./gql/${descapitalize(model.name)}Paginate.graphql'),
-            variables: {pageNumber, itemsPerPage, search, orderBy, orderDesc},
+            query: require('./gql/${model.name}/paginate${capitalize(model.name)}.graphql'),
+            variables: {pageNumber, itemsPerPage, search, filters, orderBy, orderDesc},
             fetchPolicy: "network-only"
         })
     }
     
     ${findBy(model)}
 
-    create${capitalize(model.name)}(form) {
+    create${capitalize(model.name)}(input) {
         return graphqlClient.mutate({
-            mutation: require('./gql/${descapitalize(model.name)}Create.graphql'),
-            variables: form
+            mutation: require('./gql/${model.name}/create${capitalize(model.name)}.graphql'),
+            variables: {input}
         })
     }
     
-    update${capitalize(model.name)}(form) {
+    update${capitalize(model.name)}(id,input) {
         return graphqlClient.mutate({
-            mutation: require('./gql/${descapitalize(model.name)}Update.graphql'),
-            variables: form
+            mutation: require('./gql/${model.name}/update${capitalize(model.name)}.graphql'),
+            variables: {id, input}
         })
     }
     
      delete${capitalize(model.name)}(id) {
         return graphqlClient.mutate({
-            mutation: require('./gql/${descapitalize(model.name)}Delete.graphql'),
+            mutation: require('./gql/${model.name}/delete${capitalize(model.name)}.graphql'),
             variables: {id}
         })
     }

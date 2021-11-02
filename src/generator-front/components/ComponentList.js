@@ -13,8 +13,15 @@ module.exports = function ({model, moduleName}) {
         `<template>
  <v-row row wrap>
 
-    <v-col cols="12" sm="6" md="4" offset-md="8" offset-sm="6">
-        <search-input  @search="performSearch" v-model="search" />
+    <v-col cols="12" >
+        <v-row justify="space-between">
+            <v-col cols="12" sm="6" md="8">
+             <!-- FILTERS HERE -->
+            </v-col>
+            <v-col cols="12" sm="6" md="4">
+            <search-input  @search="performSearch" v-model="search" />
+            </v-col>
+        </v-row>
     </v-col>
 
     <v-col cols="12">
@@ -62,7 +69,7 @@ module.exports = function ({model, moduleName}) {
 </template>
 
 <script>
-   import ${model.name}Provider from "../../../providers/${model.name}Provider";
+   import ${model.name}Provider from "../../../../providers/${model.name}Provider";
    
    import {DeleteButton, EditButton, ShowButton, SearchInput} from "@dracul/common-frontend"
    ${importDayjsMixinIfDateExist(model.properties)} 
@@ -70,7 +77,7 @@ module.exports = function ({model, moduleName}) {
     export default {
         name: "${model.name}List",
         components: {DeleteButton, EditButton, ShowButton, SearchInput},
-        ${dateExist(model.properties)?'mixins: [DayjsMixin],':''}
+        ${dateExist(model.properties) ? 'mixins: [DayjsMixin],' : ''}
         data() {
             return {
                 items: [],
@@ -80,7 +87,14 @@ module.exports = function ({model, moduleName}) {
                 orderDesc: false,
                 itemsPerPage: 5,
                 pageNumber: 1,
-                search: ''
+                search: '',
+                filters: [
+                    /*{
+                        field: '',
+                        operator: 'eq', //(eq|contain|regex|gt|lt|lte|gte)
+                        value: ''
+                    }*/
+                ]
             }
         },
         computed: {   
@@ -109,15 +123,16 @@ module.exports = function ({model, moduleName}) {
             },
             fetch() {
                 this.loading = true
-                ${model.name}Provider.paginate${pluralize(capitalize(model.name))}(
+                ${model.name}Provider.paginate${capitalize(model.name)}(
                     this.pageNumber, 
                     this.itemsPerPage,
                     this.search,
+                    this.filters,
                     this.getOrderBy, 
                     this.getOrderDesc
                 ).then(r => {
-                    this.items = r.data.${descapitalize(model.name)}Paginate.items
-                    this.totalItems = r.data.${descapitalize(model.name)}Paginate.totalItems
+                    this.items = r.data.paginate${capitalize(model.name)}.items
+                    this.totalItems = r.data.paginate${capitalize(model.name)}.totalItems
                 }).catch(err => {
                     console.error(err)
                 }).finally(() => this.loading = false)
@@ -137,7 +152,7 @@ module.exports = function ({model, moduleName}) {
 function headers(properties, modelName, moduleName) {
 
     let content = properties.map(field => {
-        if(field.type== "MultiLang"){
+        if (field.type == "MultiLang") {
             return `{text: this.$t('${getI18nKey(moduleName, modelName, field.name, true)}') + '-EN', value: '${field.name}.en'},
             {text: this.$t('${getI18nKey(moduleName, modelName, field.name, true)}')+ '-ES', value: '${field.name}.es'},
             {text: this.$t('${getI18nKey(moduleName, modelName, field.name, true)}')+ '-PT', value: '${field.name}.pt'}
@@ -168,7 +183,7 @@ function refProps(properties) {
     content += objIdProps.map(field => {
         return `
          <template v-slot:item.${field.name}="{ item }">
-            {{ item.${field.name}.${field.refDisplayField} }}
+            {{ item.${field.name} ? item.${field.name}.${field.refDisplayField} : '' }}
          </template>
         `
     }).join('\n ')
@@ -183,13 +198,13 @@ function dateProps(properties) {
     let objIdListProps = filterDateProperties(properties)
 
     content += objIdListProps.map(field => {
-        if(field.type === "Date"){
+        if (field.type === "Date") {
             return `
          <template v-slot:item.${field.name}="{ item }">
             {{getDateFormat(item.${field.name})}}
          </template>
         `
-        }else if(field.type === "Datetime"){
+        } else if (field.type === "Datetime") {
             return `
          <template v-slot:item.${field.name}="{ item }">
             {{getDateTimeFormat(item.${field.name})}}
@@ -198,7 +213,6 @@ function dateProps(properties) {
         }
 
     }).join('\n ')
-
 
 
     return content

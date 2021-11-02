@@ -21,9 +21,9 @@ type ${model.name}Paginated{
 }
 
 type Query {
-    ${descapitalize(model.name)}Find(id:ID!): ${model.name}
-    ${descapitalize(model.name)}Fetch: [${model.name}]
-    ${descapitalize(model.name)}Paginate( pageNumber: Int, itemsPerPage: Int, search: String, orderBy: String, orderDesc: Boolean): ${model.name}Paginated  
+    find${capitalize(model.name)}(id:ID!): ${model.name}
+    fetch${capitalize(model.name)}: [${model.name}]
+    paginate${capitalize(model.name)}( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): ${model.name}Paginated  
     ${findBy(model)}
     
 }
@@ -39,9 +39,9 @@ type ${model.name}Delete{
 
 
 type Mutation {
-    ${descapitalize(model.name)}Create(input: ${model.name}Input): ${model.name}
-    ${descapitalize(model.name)}Update(id: ID!, input: ${model.name}Input): ${model.name}
-    ${descapitalize(model.name)}Delete(id: ID!): ${model.name}Delete!
+    create${capitalize(model.name)}(input: ${model.name}Input): ${model.name}
+    update${capitalize(model.name)}(id: ID!, input: ${model.name}Input): ${model.name}
+    delete${capitalize(model.name)}(id: ID!): ${model.name}Delete!
 }
 `
 

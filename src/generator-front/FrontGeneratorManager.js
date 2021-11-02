@@ -9,8 +9,10 @@ const pluralize = require("../utils/pluralize");
 const OUTPUT_PATH = './output/front/'
 
 //Generators
-const I18nMessages = require("./i18n/I18nMessages");
-const Routes = require("./routes/Routes");
+const I18nMessages = require("./i18n/messages/I18nMessages");
+const I18nIndex = require("./i18n/I18nIndex");
+const ManagementRoutes = require("./routes/ManagementRoutes");
+const IndexRoute = require("./routes/IndexRoute");
 const Provider = require("./providers/Provider");
 const PageCrud = require("./pages/PageCrud");
 const ComponentCrud = require("./components/ComponentCrud");
@@ -52,7 +54,11 @@ class FrontGeneratorManager {
 
 
     I18N_PATH() {
-        return this.BASE_PATH() + '/i18n/messages'
+        return this.BASE_PATH() + '/i18n/'
+    }
+
+    I18N_MESSAGES_PATH() {
+        return this.BASE_PATH() + '/i18n/messages/'
     }
 
     ROUTES_PATH() {
@@ -61,6 +67,10 @@ class FrontGeneratorManager {
 
     PAGES_PATH() {
         return this.BASE_PATH() + '/pages/'
+    }
+
+    PAGES_CRUD_PATH() {
+        return this.BASE_PATH() + '/pages/crud/'
     }
 
     PROVIDERS_PATH() {
@@ -75,20 +85,36 @@ class FrontGeneratorManager {
         createDir(OUTPUT_PATH)
         createDir(this.BASE_PATH())
         createDir(this.I18N_PATH())
+        createDir(this.I18N_MESSAGES_PATH())
         createDir(this.ROUTES_PATH())
         createDir(this.PAGES_PATH())
+        createDir(this.PAGES_CRUD_PATH())
         createDir(this.PROVIDERS_PATH())
         createDir(this.GQL_PATH())
     }
 
     generateI18n() {
-        let path = this.I18N_PATH() + '/index.js'
-        writeFile(path, I18nMessages, this.source, 'i18n')
+
+
+        this.source.models.forEach(model => {
+            let path = this.I18N_MESSAGES_PATH() + model.name + 'Messages.js'
+            writeFile(path, I18nMessages, {model: model, moduleName: this.source.module}, 'i18nMessages')
+        })
+
+        let path = this.I18N_PATH() + 'index.js'
+        writeFile(path, I18nIndex, this.source, 'i18nIndex')
+
+
     }
 
-    generateRoutes() {
+    generateManagementRoutes() {
+        let path = this.ROUTES_PATH() + '/'+ this.source.module + 'ManagementRoutes.js'
+        writeFile(path, ManagementRoutes, this.source.models, 'Routes')
+    }
+
+    generateIndexRoute() {
         let path = this.ROUTES_PATH() + '/index.js'
-        writeFile(path, Routes, this.source.models, 'Routes')
+        writeFile(path, IndexRoute, this.source.module, 'Routes')
     }
 
 
@@ -99,56 +125,64 @@ class FrontGeneratorManager {
         })
     }
 
+
+    generateGqlDir() {
+        this.source.models.forEach(model => {
+            createDir(this.GQL_PATH() + model.name)
+        })
+
+    }
+
     generateGqlAll() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Fetch'
+            let name = 'fetch' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlFetchAll, model, fileName)
         })
     }
 
     generateGqlById() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Find'
+            let name = 'find' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlFetchByID, model, fileName)
         })
     }
 
     generateGqlPaginate() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Paginate'
+            let name = 'paginate' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlPaginate, model, fileName)
         })
     }
 
     generateGqlCreate() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Create'
+            let name = 'create' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlCreate, model, fileName)
         })
     }
 
     generateGqlUpdate() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Update'
+            let name = 'update' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlUpdate, model, fileName)
         })
     }
 
     generateGqlDelete() {
         this.source.models.forEach(model => {
-            let name = descapitalize(model.name) + 'Delete'
+            let name = 'delete' + capitalize(model.name)
             let fileName = name + '.graphql'
-            let filePath = this.GQL_PATH() + fileName
+            let filePath = this.GQL_PATH() + model.name + '/' + fileName
             writeFile(filePath, GqlDelete, model, fileName)
         })
     }
@@ -159,31 +193,31 @@ class FrontGeneratorManager {
                 if (field.findby) {
                     let name = descapitalize(model.name) + 'By' + capitalize(field.name) + '.graphql'
                     let fileName = name + '.graphql'
-                    let filePath = this.GQL_PATH() + fileName
-                    writeFile(filePath, GqlFetchBySomething, {model,field}, fileName)
+                    let filePath = this.GQL_PATH() + model.name + '/' + fileName
+                    writeFile(filePath, GqlFetchBySomething, {model, field}, fileName)
                 }
             })
         })
     }
 
-    PAGE_MANAGEMENT_PATH(model){
-        if(model && model.name){
-            return this.PAGES_PATH() + model.name + 'ManagementPage/'
+    PAGE_CRUD_FINALPATH(model) {
+        if (model && model.name) {
+            return this.PAGES_CRUD_PATH() + model.name + 'Page/'
         }
         throw new Error("model.name is required")
     }
 
     generatePages() {
         this.source.models.forEach(model => {
-            createDir(this.PAGE_MANAGEMENT_PATH(model))
-            let path = this.PAGE_MANAGEMENT_PATH(model) + 'index.vue'
+            createDir(this.PAGE_CRUD_FINALPATH(model))
+            let path = this.PAGE_CRUD_FINALPATH(model) + 'index.vue'
             writeFile(path, PageCrud, model, 'Page')
         })
     }
 
     generateForm() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Form/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Form/'
             createDir(dirPath)
             let name = model.name + 'Form'
             let fileName = name + '.vue'
@@ -197,21 +231,29 @@ class FrontGeneratorManager {
         this.source.models.forEach(model => {
             model.properties.forEach(field => {
                 if (field.type == 'ObjectId' || field.type == 'ObjectIdList') {
-                    let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Form/'
+                    let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Form/'
                     createDir(dirPath)
                     let name = capitalize(field.ref) + 'Combobox'
                     let fileName = name + '.vue'
                     let filePath = dirPath + fileName
-                    writeFile(filePath, ComponentComboObjectId, {field: field, model: model, moduleName: this.source.module }, fileName)
+                    writeFile(filePath, ComponentComboObjectId, {
+                        field: field,
+                        model: model,
+                        moduleName: this.source.module
+                    }, fileName)
                 }
 
                 if (field.type == 'Enum' || field.type == 'EnumList') {
-                    let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Form/'
+                    let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Form/'
                     createDir(dirPath)
                     let name = capitalize(field.name) + 'Combobox'
                     let fileName = name + '.vue'
                     let filePath = dirPath + fileName
-                    writeFile(filePath, ComponentComboEnum, {field: field, model: model, moduleName: this.source.module }, fileName)
+                    writeFile(filePath, ComponentComboEnum, {
+                        field: field,
+                        model: model,
+                        moduleName: this.source.module
+                    }, fileName)
                 }
             })
         })
@@ -219,7 +261,7 @@ class FrontGeneratorManager {
 
     generateCreate() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Create/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Create/'
             createDir(dirPath)
             let name = model.name + 'Create'
             let fileName = name + '.vue'
@@ -231,7 +273,7 @@ class FrontGeneratorManager {
 
     generateUpdate() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Update/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Update/'
             createDir(dirPath)
             let name = model.name + 'Update'
             let fileName = name + '.vue'
@@ -243,7 +285,7 @@ class FrontGeneratorManager {
 
     generateDelete() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Delete/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Delete/'
             createDir(dirPath)
             let name = model.name + 'Delete'
             let fileName = name + '.vue'
@@ -255,7 +297,7 @@ class FrontGeneratorManager {
 
     generateShowData() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Show/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Show/'
             createDir(dirPath)
             let name = model.name + 'ShowData'
             let fileName = name + '.vue'
@@ -266,7 +308,7 @@ class FrontGeneratorManager {
 
     generateShow() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Show/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Show/'
             createDir(dirPath)
             let name = model.name + 'Show'
             let fileName = name + '.vue'
@@ -278,7 +320,7 @@ class FrontGeneratorManager {
 
     generateList() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'List/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'List/'
             createDir(dirPath)
             let name = model.name + 'List'
             let fileName = name + '.vue'
@@ -290,7 +332,7 @@ class FrontGeneratorManager {
 
     generateCrud() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_MANAGEMENT_PATH(model) + model.name + 'Crud/'
+            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Crud/'
             createDir(dirPath)
             let name = model.name + 'Crud'
             let fileName = name + '.vue'

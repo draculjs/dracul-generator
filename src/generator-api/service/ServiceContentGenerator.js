@@ -1,5 +1,4 @@
 const capitalize = require('../../utils/capitalize')
-const pluralize = require('../../utils/pluralize')
 const filterBackendProperties = require('../../utils/filterBackendProperties')
 
 module.exports = function (model) {
@@ -16,7 +15,7 @@ export const find${capitalize(model.name)} = async function (id) {
     })
 }
 
-export const fetch${pluralize(capitalize(model.name))} = async function () {
+export const fetch${capitalize(model.name)} = async function () {
     return new Promise((resolve, reject) => {
         ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec((err, res) => (
             err ? reject(err) : resolve(res)
@@ -24,7 +23,7 @@ export const fetch${pluralize(capitalize(model.name))} = async function () {
     })
 }
 
-export const paginate${pluralize(capitalize(model.name))} = function ( pageNumber = 1, itemsPerPage = 5, search = null, orderBy = null, orderDesc = false) {
+export const paginate${capitalize(model.name)} = function ( pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
 
     function qs(search) {
         let qs = {}
@@ -35,6 +34,42 @@ export const paginate${pluralize(capitalize(model.name))} = function ( pageNumbe
                 ]
             }
         }
+        
+        if(filters){
+        
+            filters.forEach(filter => {
+                switch(filter.operator){
+                    case '=':
+                    case 'eq':
+                        qs[filter.field] = {$eq: filter.value}
+                        break;
+                    case 'contain':
+                    case 'regex':
+                        qs[filter.field] = {$regex: filter.value}
+                        break;
+                    case '>':
+                    case 'gt':
+                        qs[filter.field] = {$gt: filter.value}
+                        break;    
+                    case '<':
+                    case 'lt':
+                        qs[filter.field] = {$lt: filter.value}
+                        break;    
+                    case '>=':
+                    case 'gte':
+                        qs[filter.field] = {$gte: filter.value}
+                        break;    
+                    case '<=':
+                    case 'lte':
+                        qs[filter.field] = {$lte: filter.value}
+                        break;          
+                    default:
+                        qs[filter.field] = {$eq: filter.value}
+                }
+            })
+        
+        }
+        
         return qs
     }
     
@@ -74,9 +109,9 @@ export const create${capitalize(model.name)} = async function (authUser, {${para
         
             if (error) {
                 if (error.name == "ValidationError") {
-                    rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
-                rejects(error)
+                return rejects(error)
             }    
         
             ${resolvePopulate(model.properties)}
@@ -93,9 +128,11 @@ export const update${capitalize(model.name)} = async function (authUser, id, {${
             
             if (error) {
                 if (error.name == "ValidationError") {
-                    rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                 return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                
                 }
-                rejects(error)
+                return rejects(error)
+                
             } 
         
             ${resolvePopulate(model.properties)}
@@ -131,7 +168,7 @@ function findBy(model){
 function findByMethod(model, field){
     let content =
 `
-export const find${pluralize(capitalize(model.name))}By${capitalize(field.name)} = async function (${field.name}) {
+export const find${capitalize(model.name)}By${capitalize(field.name)} = async function (${field.name}) {
     return new Promise((resolve, reject) => {
         ${model.name}.find({${field.name}: ${field.name}}).${populate(model.properties)}exec((err, res) => (
             err ? reject(err) : resolve(res)
