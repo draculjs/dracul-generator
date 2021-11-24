@@ -101,7 +101,7 @@ function generateFormObjectFields(properties) {
             case 'ObjectId':
                 return `${field.name}: this.item.${field.name} ? this.item.${field.name}.id : null`
             case 'ObjectIdList':
-                return `${field.name}: this.item.${field.name}.map(i=> i.id?i.id:i)`
+                return `${field.name}: this.item.${field.name} ? this.item.${field.name}.map(i=> i.id?i.id:i) : null`
             default:
                 return `${field.name}: this.item.${field.name}`
         }

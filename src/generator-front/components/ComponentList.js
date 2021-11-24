@@ -172,7 +172,7 @@ function refProps(properties) {
     content += objIdListProps.map(field => {
         return `
          <template v-slot:item.${field.name}="{ item }">
-            {{item.${field.name}.map(e=> e.${field.refDisplayField}).join(", ")}}
+            {{item.${field.name} ? item.${field.name}.map(e=> e.${field.refDisplayField}).join(", ") : '' }}
          </template>
         `
     }).join('\n ')
