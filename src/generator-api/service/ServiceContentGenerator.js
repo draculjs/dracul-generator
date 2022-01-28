@@ -25,7 +25,7 @@ export const fetch${capitalize(model.name)} = async function () {
 
 export const paginate${capitalize(model.name)} = function ( pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
 
-    function qs(search) {
+    function qs(search, filters) {
         let qs = {}
         if (search) {
             qs = {
@@ -81,7 +81,7 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
         }
     }
 
-    ${model.softDelete?"let query = {deleted: false, ...qs(search)}":"let query = qs(search)"}
+    ${model.softDelete?"let query = {deleted: false, ...qs(search, filters)}":"let query = qs(search, filters)"}
     let populate = ${populateArray(model.properties)}
     let sort = getSort(orderBy, orderDesc)
     let params = {page: pageNumber, limit: itemsPerPage, populate, sort}
