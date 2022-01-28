@@ -16,7 +16,7 @@ module.exports = function ({model, moduleName}) {
             />
         </template>
         
-         <add-button @click="create"></add-button>
+         <add-button v-if="$store.getters.hasPermission('${model.name.toUpperCase()}_CREATE')" @click="create"></add-button>
       
         <${kebabCase(model.name)}-create v-if="creating" 
                         :open="creating"

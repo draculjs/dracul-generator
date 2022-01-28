@@ -49,6 +49,8 @@ function fields(properties) {
                 return ` ${field.name}: [{type: String, enum: "${enumOptionsArrayList(field.enumOptions)}, required: ${field.required}}]`
             case "StringList":
                 return ` ${field.name}: [{type: String, required: ${field.required}}]`
+            case "StringLarge":
+                return ` ${field.name}: {type: String, required: ${field.required}}`
             case "Float":
                 return ` ${field.name}: {type: Number, required: ${field.required}, unique: ${(field.unique === true)?true:false}}`
             case "Int":
