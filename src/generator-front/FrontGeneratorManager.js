@@ -15,16 +15,18 @@ const ManagementRoutes = require("./routes/ManagementRoutes");
 const IndexRoute = require("./routes/IndexRoute");
 const Provider = require("./providers/Provider");
 const PageCrud = require("./pages/PageCrud");
-const ComponentCrud = require("./components/ComponentCrud");
-const ComponentList = require("./components/ComponentList");
-const ComponentForm = require("./components/ComponentForm");
-const ComponentCreate = require("./components/ComponentCreate");
-const ComponentUpdate = require("./components/ComponentUpdate");
-const ComponentDelete = require("./components/ComponentDelete");
-const ComponentShowData = require("./components/ComponentShowData");
-const ComponentShow = require("./components/ComponentShow");
+const ComponentCrud = require("./pages/ComponentCrud");
+const ComponentList = require("./pages/ComponentList");
+const ComponentForm = require("./pages/ComponentForm");
+const ComponentCreate = require("./pages/ComponentCreate");
+const ComponentUpdate = require("./pages/ComponentUpdate");
+const ComponentDelete = require("./pages/ComponentDelete");
+const ComponentShowData = require("./pages/ComponentShowData");
+const ComponentShow = require("./pages/ComponentShow");
+
 const ComponentComboObjectId = require("./components/ComponentComboObjectId");
 const ComponentComboEnum = require("./components/ComponentComboEnum");
+const IndexCombobox = require("./components/IndexCombobox");
 
 //GQL
 const GqlFetchAll = require("./providers/gql/GqlFetchAll")
@@ -69,6 +71,10 @@ class FrontGeneratorManager {
         return this.BASE_PATH() + '/pages/'
     }
 
+    COMPONENTS_PATH() {
+        return this.BASE_PATH() + '/components/'
+    }
+
     PAGES_CRUD_PATH() {
         return this.BASE_PATH() + '/pages/crud/'
     }
@@ -88,6 +94,7 @@ class FrontGeneratorManager {
         createDir(this.I18N_MESSAGES_PATH())
         createDir(this.ROUTES_PATH())
         createDir(this.PAGES_PATH())
+        createDir(this.COMPONENTS_PATH())
         createDir(this.PAGES_CRUD_PATH())
         createDir(this.PROVIDERS_PATH())
         createDir(this.GQL_PATH())
@@ -231,7 +238,7 @@ class FrontGeneratorManager {
         this.source.models.forEach(model => {
             model.properties.forEach(field => {
                 if (field.type == 'ObjectId' || field.type == 'ObjectIdList') {
-                    let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Form/'
+                    let dirPath = this.COMPONENTS_PATH() + capitalize(field.ref) + 'Combobox/'
                     createDir(dirPath)
                     let name = capitalize(field.ref) + 'Combobox'
                     let fileName = name + '.vue'
@@ -241,10 +248,17 @@ class FrontGeneratorManager {
                         model: model,
                         moduleName: this.source.module
                     }, fileName)
+
+                    //INDEX
+                    let indexFileName =  'index.js'
+                    let indexFilePath =  dirPath + indexFileName
+                    writeFile(indexFilePath, IndexCombobox, {
+                        name: field.ref
+                    }, indexFileName)
                 }
 
                 if (field.type == 'Enum' || field.type == 'EnumList') {
-                    let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Form/'
+                    let dirPath = this.COMPONENTS_PATH() + capitalize(field.name) + 'Combobox/'
                     createDir(dirPath)
                     let name = capitalize(field.name) + 'Combobox'
                     let fileName = name + '.vue'
@@ -254,7 +268,18 @@ class FrontGeneratorManager {
                         model: model,
                         moduleName: this.source.module
                     }, fileName)
+
+                    //INDEX
+                    let indexFileName =  'index.js'
+                    let indexFilePath =  dirPath + indexFileName
+                    writeFile(indexFilePath, IndexCombobox, {
+                        name: field.name
+                    }, indexFileName)
                 }
+
+
+
+
             })
         })
     }

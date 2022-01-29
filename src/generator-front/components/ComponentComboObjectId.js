@@ -4,10 +4,7 @@ const getI18nKey = require('../../utils/getI18nKey')
 module.exports = function ({field, model, moduleName}) {
     let content =
 `<template>
-
-        <v-select
-                ${field.disabled ? 'disabled' : ''}
-                ${field.type == 'ObjectIdList' ? 'multiple' : ''}
+        <v-autocomplete
                 prepend-icon="${field.icon ? field.icon : 'label'}"
                 :items="items"
                 :item-text="'${field.refDisplayField ? field.refDisplayField : 'name'}'"
@@ -19,8 +16,13 @@ module.exports = function ({field, model, moduleName}) {
                 :error-messages="getInputErrors('${field.name}')"
                 color="secondary"
                 item-color="secondary"
-                ${field.required?':rules="required"':''}
-        ></v-select>
+                :rules="isRequired ? required : []"
+                :multiple="multiple"
+                :chips="chips"
+                :solo="solo"
+                :disabled="disabled"
+                :readonly="readonly"
+        ></v-autocomplete>
 
 </template>
 
@@ -35,9 +37,13 @@ module.exports = function ({field, model, moduleName}) {
         name: "${capitalize(field.ref)}Combobox",
         mixins: [InputErrorsByProps, RequiredRule],
         props:{
-            value: {
-               type: [String, Array]
-            },
+            value: {type: [String, Array]},
+            multiple: {type:Boolean, default: ${field.type == 'ObjectIdList' ? 'true' : 'false'} },
+            solo: {type:Boolean, default: false},
+            chips: {type:Boolean, default: false},
+            readonly: {type:Boolean, default:false},
+            disabled: {type:Boolean, default: ${field.disabled?'true':'false'}},
+            isRequired: {type:Boolean, default: ${field.required?'true':'false'} },
         },
         data() {
             return {
@@ -68,9 +74,7 @@ module.exports = function ({field, model, moduleName}) {
 
 <style scoped>
 
-</style>
-
-`
+</style>`
 
 return content
 }
@@ -82,7 +86,7 @@ function provider(field){
         return `import {roleProvider} from "@dracul/user-frontend"`
     }
     else{
-        return `import ${capitalize(field.ref)}Provider from "../../../../providers/${capitalize(field.ref)}Provider"`
+        return `import ${capitalize(field.ref)}Provider from "../../providers/${capitalize(field.ref)}Provider"`
     }
 }
 

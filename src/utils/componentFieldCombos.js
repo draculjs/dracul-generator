@@ -39,7 +39,7 @@ module.exports.generateImportCombos = function generateImportCombos(properties) 
     let propFiltered = filterObjectIdProperties(properties);
 
     return propFiltered.map(field => {
-        return `import ${capitalize(field.ref)}Combobox from "./${capitalize(field.ref)}Combobox";`
+        return `import ${capitalize(field.ref)}Combobox from "../../../../components/${capitalize(field.ref)}Combobox";`
     }).join('\n')
 }
 
@@ -48,7 +48,7 @@ module.exports.generateImportCombosEnum = function generateImportCombos(properti
     let propFiltered = properties.filter(f => f.type == "Enum" || f.type == "EnumList");
 
     return propFiltered.map(field => {
-        return `import ${capitalize(field.name)}Combobox from "./${capitalize(field.name)}Combobox";`
+        return `import ${capitalize(field.name)}Combobox from "../../../../components/${capitalize(field.name)}Combobox";`
     }).join('\n')
 }
 
