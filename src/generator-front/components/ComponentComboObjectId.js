@@ -22,6 +22,7 @@ module.exports = function ({field, model, moduleName}) {
                 :solo="solo"
                 :disabled="disabled"
                 :readonly="readonly"
+                 :clearable="clearable"
         ></v-autocomplete>
 
 </template>
@@ -44,6 +45,7 @@ module.exports = function ({field, model, moduleName}) {
             readonly: {type:Boolean, default:false},
             disabled: {type:Boolean, default: ${field.disabled?'true':'false'}},
             isRequired: {type:Boolean, default: ${field.required?'true':'false'} },
+             clearable: {type:Boolean, default: false},
         },
         data() {
             return {

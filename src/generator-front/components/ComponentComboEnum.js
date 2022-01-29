@@ -19,6 +19,7 @@ module.exports = function ({field, model, moduleName}) {
                 color="secondary"
                 item-color="secondary"
                 ${field.required?':rules="required"':''}
+                :clearable="clearable"
                 :multiple="multiple"
                 :chips="chips"
                 :solo="solo"
@@ -37,8 +38,9 @@ module.exports = function ({field, model, moduleName}) {
         mixins: [InputErrorsByProps, RequiredRule],
         props:{
             value: {type: [String, Array]},
-            multiple: {type:Boolean, default: false}
-            solo: {type:Boolean, default: false}
+            clearable: {type:Boolean, default: false},
+            multiple: {type:Boolean, default: false},
+            solo: {type:Boolean, default: false},
             chips: {type:Boolean, default: false}
         },
         data() {
