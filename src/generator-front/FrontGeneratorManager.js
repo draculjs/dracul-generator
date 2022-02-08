@@ -115,7 +115,7 @@ class FrontGeneratorManager {
     }
 
     generateManagementRoutes() {
-        let path = this.ROUTES_PATH() + '/'+ this.source.module + 'ManagementRoutes.js'
+        let path = this.ROUTES_PATH() + '/'+ this.source.module + 'CrudRoutes.js'
         writeFile(path, ManagementRoutes, this.source.models, 'Routes')
     }
 
