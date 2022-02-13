@@ -39,29 +39,29 @@ function fields(properties) {
         switch (field.type) {
             case "ObjectId":
                 if(!field.ref) throw new Error("Field " + field.name + "  has ObjectId type so needs ref atributte")
-                return ` ${field.name}: {type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}", required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: false}`
+                return ` ${field.name}: {type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}", required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}`
             case "ObjectIdList":
                 if(!field.ref) throw new Error("Field " + field.name + "  has ObjectIdList type so needs ref atributte")
-                return ` ${field.name}: [{type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}",required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: false}]`
+                return ` ${field.name}: [{type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}",required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}]`
             case "Enum":
-                return ` ${field.name}: {type: String, enum: ${enumOptionsArrayList(field.enumOptions)}, required: ${field.required}, index: false}`
+                return ` ${field.name}: {type: String, enum: ${enumOptionsArrayList(field.enumOptions)}, required: ${field.required}, index: ${(field.unique === true)?true:false}}`
             case "EnumList":
-                return ` ${field.name}: [{type: String, enum: "${enumOptionsArrayList(field.enumOptions)}, required: ${field.required}, index: false}]`
+                return ` ${field.name}: [{type: String, enum: "${enumOptionsArrayList(field.enumOptions)}, required: ${field.required}, index: ${(field.unique === true)?true:false}}]`
             case "StringList":
                 return ` ${field.name}: [{type: String, required: ${field.required}}]`
             case "StringLarge":
                 return ` ${field.name}: {type: String, required: ${field.required}}`
             case "Float":
-                return ` ${field.name}: {type: Number, required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: false}`
+                return ` ${field.name}: {type: Number, required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}`
             case "Int":
-                return ` ${field.name}: {type: Number, required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: false}`
+                return ` ${field.name}: {type: Number, required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}`
             case "Boolean":
-                return ` ${field.name}: {type: Boolean, required: ${field.required}, index: false}`
+                return ` ${field.name}: {type: Boolean, required: ${field.required}, index: ${(field.unique === true)?true:false}}`
             case "Date":
             case "Datetime":
-                return ` ${field.name}: {type: Date, required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: false}`
+                return ` ${field.name}: {type: Date, required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}`
             case "Mixed":
-                return ` ${field.name}: {type: mongoose.Schema.Types.Mixed, ref: "${field.ref}", required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: false}`
+                return ` ${field.name}: {type: mongoose.Schema.Types.Mixed, ref: "${field.ref}", required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}`
             case "MultiLang":
                 return ` ${field.name}: {
             en: {type: String, required: false, index: false},
@@ -69,7 +69,7 @@ function fields(properties) {
             pt: {type: String, required: false, index: false},
         }`
             default:
-                return ` ${field.name}: {type: ${field.type}, required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: false}`
+                return ` ${field.name}: {type: ${field.type}, required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}`
 
         }
     }).join(',\n')
