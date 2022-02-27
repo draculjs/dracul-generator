@@ -37,7 +37,12 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
         
         if(filters){
         
-            filters.forEach(filter => {
+           for(let filter of filters){
+           
+                if(!filter.value){
+                    continue
+                }
+                    
                 switch(filter.operator){
                     case '=':
                     case 'eq':
@@ -66,7 +71,7 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
                     default:
                         qs[filter.field] = {...qs[filter.field], $eq: filter.value}
                 }
-            })
+            }
         
         }
         
