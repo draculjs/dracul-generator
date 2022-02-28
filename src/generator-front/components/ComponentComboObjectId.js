@@ -3,14 +3,14 @@ const getI18nKey = require('../../utils/getI18nKey')
 
 module.exports = function ({field, model, moduleName}) {
     let content =
-`<template>
+        `<template>
         <v-autocomplete
                 prepend-icon="${field.icon ? field.icon : 'label'}"
                 :items="items"
                 :item-text="'${field.refDisplayField ? field.refDisplayField : 'name'}'"
-                :item-value="'id'"
+                :item-value="itemValue"
                 v-model="item"
-                :label="$t('${getI18nKey(moduleName,model.name,field.name,true)}')"
+                :label="$t('${getI18nKey(moduleName, model.name, field.name, true)}')"
                 :loading="loading"
                 :error="hasInputErrors('${field.name}')"
                 :error-messages="getInputErrors('${field.name}')"
@@ -22,7 +22,10 @@ module.exports = function ({field, model, moduleName}) {
                 :solo="solo"
                 :disabled="disabled"
                 :readonly="readonly"
-                 :clearable="clearable"
+                :clearable="clearable"
+                :hide-details="hideDetails"
+                :style="{width: width, maxWidth: width}"
+                :return-object="returnObject"
         ></v-autocomplete>
 
 </template>
@@ -43,9 +46,13 @@ module.exports = function ({field, model, moduleName}) {
             solo: {type:Boolean, default: false},
             chips: {type:Boolean, default: false},
             readonly: {type:Boolean, default:false},
-            disabled: {type:Boolean, default: ${field.disabled?'true':'false'}},
-            isRequired: {type:Boolean, default: ${field.required?'true':'false'} },
-             clearable: {type:Boolean, default: false},
+            disabled: {type:Boolean, default: ${field.disabled ? 'true' : 'false'}},
+            isRequired: {type:Boolean, default: ${field.required ? 'true' : 'false'} },
+            clearable: {type:Boolean, default: false},
+            hideDetails: {type: Boolean, default: false},
+            returnObject: {type: Boolean, default: false},
+            itemValue: {type: String, default: 'id'},
+            width: {type: String, default: null},
         },
         data() {
             return {
@@ -78,35 +85,34 @@ module.exports = function ({field, model, moduleName}) {
 
 </style>`
 
-return content
+    return content
 }
 
-function provider(field){
-    if(field.ref == 'User'){
+function provider(field) {
+    if (field.ref == 'User') {
         return `import {userProvider} from "@dracul/user-frontend"`
-    } else if(field.ref == 'Role'){
+    } else if (field.ref == 'Role') {
         return `import {roleProvider} from "@dracul/user-frontend"`
-    }
-    else{
+    } else {
         return `import ${capitalize(field.ref)}Provider from "../../providers/${capitalize(field.ref)}Provider"`
     }
 }
 
 
-function fetchFunction(field){
-    if(field.ref == 'User'){
+function fetchFunction(field) {
+    if (field.ref == 'User') {
         return `this.loading= true
               userProvider.users().then(r => {
                     this.items = r.data.users
                 }).catch(err => console.error(err))
                 .finally(()=> this.loading = false)`
-    }else if(field.ref == 'Role'){
+    } else if (field.ref == 'Role') {
         return `this.loading= true
               roleProvider.roles().then(r => {
                     this.items = r.data.roles
                 }).catch(err => console.error(err))
                 .finally(()=> this.loading = false)`
-    }else{
+    } else {
         return `this.loading= true
                 ${capitalize(field.ref)}Provider.fetch${capitalize(field.ref)}().then(r => {
                     this.items = r.data.fetch${capitalize(field.ref)}
