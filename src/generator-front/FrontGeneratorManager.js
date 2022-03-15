@@ -10,6 +10,7 @@ const OUTPUT_PATH = './output/front/'
 
 //Generators
 const I18nMessages = require("./i18n/messages/I18nMessages");
+const I18nPermissionMessages = require("./i18n/messages/I18nPermissionMessages");
 const I18nIndex = require("./i18n/I18nIndex");
 const ManagementRoutes = require("./routes/ManagementRoutes");
 const IndexRoute = require("./routes/IndexRoute");
@@ -63,6 +64,10 @@ class FrontGeneratorManager {
         return this.BASE_PATH() + '/i18n/messages/'
     }
 
+    I18N_PERMISSION_MESSAGES_PATH() {
+        return this.BASE_PATH() + '/i18n/permissions/'
+    }
+
     ROUTES_PATH() {
         return this.BASE_PATH() + '/routes'
     }
@@ -92,6 +97,7 @@ class FrontGeneratorManager {
         createDir(this.BASE_PATH())
         createDir(this.I18N_PATH())
         createDir(this.I18N_MESSAGES_PATH())
+        createDir(this.I18N_PERMISSION_MESSAGES_PATH())
         createDir(this.ROUTES_PATH())
         createDir(this.PAGES_PATH())
         createDir(this.COMPONENTS_PATH())
@@ -108,11 +114,17 @@ class FrontGeneratorManager {
             writeFile(path, I18nMessages, {model: model, moduleName: this.source.module}, 'i18nMessages')
         })
 
+        this.source.models.forEach(model => {
+            let path = this.I18N_PERMISSION_MESSAGES_PATH() + model.name + 'PermissionMessages.js'
+            writeFile(path, I18nPermissionMessages, {model: model}, 'i18nPermissionMessages')
+        })
+
         let path = this.I18N_PATH() + 'index.js'
         writeFile(path, I18nIndex, this.source, 'i18nIndex')
 
 
     }
+
 
     generateManagementRoutes() {
         let path = this.ROUTES_PATH() + '/'+ this.source.module + 'CrudRoutes.js'
