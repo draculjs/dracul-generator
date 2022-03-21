@@ -8,7 +8,9 @@ ${getImportPermissionMessages(source.models)}
 
 
 const messages = merge.all([
-    ${getModelMessages(source.models)}
+    ${getModelMessages(source.models)}, 
+    
+    ${getModelPermissionMessages(source.models)}
 ])
 
 export default messages;
@@ -30,6 +32,11 @@ function getImportPermissionMessages(models) {
 
 function getModelMessages(models) {
     return models.map(model => {
-        return `${model.name}Messages, ${model.name}PermissionMessages`
+        return `${model.name}Messages`
+    }).join(",\n")
+}
+function getModelPermissionMessages(models) {
+    return models.map(model => {
+        return `${model.name}PermissionMessages`
     }).join(",\n")
 }
