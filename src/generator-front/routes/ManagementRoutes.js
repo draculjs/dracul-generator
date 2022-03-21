@@ -26,7 +26,7 @@ function getRoutesPages(models) {
         component: ${model.name + 'Page'},  
         meta: {
             requiresAuth: true,
-            permission: "${model.name.toUpperCase()}_SHOW"
+            permission: "${model.name.toUpperCase()}_MENU"
         }
      }`
     }).join(",\n")
