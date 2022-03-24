@@ -9,17 +9,21 @@ import {UserInputError} from 'apollo-server-express'
 
 export const find${capitalize(model.name)} = async function (id) {
     return new Promise((resolve, reject) => {
-        ${model.name}.findOne({_id: id}).${populate(model.properties)}exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
+        ${model.name}.findOne({_id: id}).${populate(model.properties)}exec((err, doc) => {
+            if(err) return reject(err)
+             
+            resolve(doc)
+        })
     })
 }
 
 export const fetch${capitalize(model.name)} = async function () {
     return new Promise((resolve, reject) => {
-        ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
+        ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec((err, docs) => {
+            if(err) return reject(err)
+             
+            resolve(docs)
+        });
     })
 }
 
