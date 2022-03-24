@@ -152,8 +152,9 @@ export const update${capitalize(model.name)} = async function (authUser, id, {${
 export const delete${capitalize(model.name)} = function (id) {
     return new Promise((resolve, rejects) => {
         find${model.name}(id).then((doc) => {
-            doc.${model.softDelete?"softdelete":"delete"}(function (err) {
-                err ? rejects(err) : resolve({id: id, success: true})
+            doc.${model.softDelete?"softdelete":"delete"}( (err) => {
+                if(err) return reject(err)
+                resolve({id: id, success: true})
             });
         })
     })
