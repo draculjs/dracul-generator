@@ -1,6 +1,7 @@
 const capitalize = require('./capitalize')
 const descapitalize = require('./descapitalize')
 const pluralize = require('./pluralize')
+const dateExist = require('./dateExist')
 
 module.exports.generateComboField = function (field, modelName, moduleName) {
     let content = `
@@ -78,9 +79,11 @@ module.exports.generateImportComponent = function generateImportComponent(proper
     }).join(',\n')
 
     if (combos.length > 0) {
-        return "components: {" + combos + "," +getMultilang(properties) + "},"
+        return "components: {" + combos + "," +getMultilang(properties) + dateExist(properties) ? ', DateInput':'' + "},"
     }else if(getMultilang(properties)){
-        return "components: {" + getMultilang(properties) + "},"
+        return "components: {" + getMultilang(properties) + dateExist(properties) ? ', DateInput':'' + "},"
+    }else if(dateExist(properties)){
+        return "components: { DateInput },"
     }
 
 

@@ -176,32 +176,12 @@ function generateComboEnumField(field, modelName, moduleName) {
 function generateDateField(field, modelName, moduleName) {
     let content = `
                    <v-col cols="12" sm="6">
-                        <v-menu
-                                v-model="${field.name}DateMenu"
-                                :close-on-content-click="false"
-                                :nudge-right="40"
-                                transition="scale-transition"
-                                offset-y
-                                min-width="290px"
-                        >
-                            <template v-slot:activator="{ on }">
-                                <v-text-field
-                                        ${field.disabled ? 'disabled' : ''}
-                                        v-model="form.${field.name}"
-                                        :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
-                                        prepend-icon="${field.icon ? field.icon : 'event'}"
-                                        readonly
-                                        v-on="on"
-                                        ${field.required ? ':rules="required"' : ''}
-                                        :error="hasInputErrors('${field.name}')"
-                                        :error-messages="getInputErrors('${field.name}')"
-                                        color="secondary"
-                                ></v-text-field>
-                            </template>
-                            <v-date-picker v-model="form.${field.name}" scrollable @input="modal =false">
-                            </v-date-picker>
-                        </v-menu>
-
+                        <date-input 
+                            v-model="form.${field.name}"
+                            :label="$t('${getI18nKey(moduleName, modelName, field.name, true)}')"
+                            :error="hasInputErrors('${field.name}')"
+                            :error-messages="getInputErrors('${field.name}')"
+                        />
                     </v-col>
     `
     return content
