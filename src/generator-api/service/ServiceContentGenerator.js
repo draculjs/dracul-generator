@@ -9,23 +9,27 @@ import {UserInputError} from 'apollo-server-express'
 
 export const find${capitalize(model.name)} = async function (id) {
     return new Promise((resolve, reject) => {
-        ${model.name}.findOne({_id: id}).${populate(model.properties)}exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
+        ${model.name}.findOne({_id: id}).${populate(model.properties)}exec((err, doc) => {
+            if(err) return reject(err)
+             
+            resolve(doc)
+        })
     })
 }
 
 export const fetch${capitalize(model.name)} = async function () {
     return new Promise((resolve, reject) => {
-        ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
+        ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec((err, docs) => {
+            if(err) return reject(err)
+             
+            resolve(docs)
+        });
     })
 }
 
 export const paginate${capitalize(model.name)} = function ( pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
 
-    function qs(search) {
+    function qs(search, filters) {
         let qs = {}
         if (search) {
             qs = {
@@ -37,36 +41,41 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
         
         if(filters){
         
-            filters.forEach(filter => {
+           for(let filter of filters){
+           
+                if(!filter.value){
+                    continue
+                }
+                    
                 switch(filter.operator){
                     case '=':
                     case 'eq':
-                        qs[filter.field] = {$eq: filter.value}
+                        qs[filter.field] = {...qs[filter.field], $eq: filter.value}
                         break;
                     case 'contain':
                     case 'regex':
-                        qs[filter.field] = {$regex: filter.value}
+                        qs[filter.field] = {...qs[filter.field], $regex: filter.value}
                         break;
                     case '>':
                     case 'gt':
-                        qs[filter.field] = {$gt: filter.value}
+                        qs[filter.field] = {...qs[filter.field], $gt: filter.value}
                         break;    
                     case '<':
                     case 'lt':
-                        qs[filter.field] = {$lt: filter.value}
+                        qs[filter.field] = {...qs[filter.field], $lt: filter.value}
                         break;    
                     case '>=':
                     case 'gte':
-                        qs[filter.field] = {$gte: filter.value}
+                        qs[filter.field] = {...qs[filter.field], $gte: filter.value}
                         break;    
                     case '<=':
                     case 'lte':
-                        qs[filter.field] = {$lte: filter.value}
+                        qs[filter.field] = {...qs[filter.field], $lte: filter.value}
                         break;          
                     default:
-                        qs[filter.field] = {$eq: filter.value}
+                        qs[filter.field] = {...qs[filter.field], $eq: filter.value}
                 }
-            })
+            }
         
         }
         
@@ -81,7 +90,7 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
         }
     }
 
-    ${model.softDelete?"let query = {deleted: false, ...qs(search)}":"let query = qs(search)"}
+    ${model.softDelete?"let query = {deleted: false, ...qs(search, filters)}":"let query = qs(search, filters)"}
     let populate = ${populateArray(model.properties)}
     let sort = getSort(orderBy, orderDesc)
     let params = {page: pageNumber, limit: itemsPerPage, populate, sort}
@@ -143,8 +152,9 @@ export const update${capitalize(model.name)} = async function (authUser, id, {${
 export const delete${capitalize(model.name)} = function (id) {
     return new Promise((resolve, rejects) => {
         find${model.name}(id).then((doc) => {
-            doc.${model.softDelete?"softdelete":"delete"}(function (err) {
-                err ? rejects(err) : resolve({id: id, success: true})
+            doc.${model.softDelete?"softdelete":"delete"}( (err) => {
+                if(err) return reject(err)
+                resolve({id: id, success: true})
             });
         })
     })

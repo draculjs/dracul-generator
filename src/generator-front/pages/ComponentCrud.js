@@ -16,7 +16,7 @@ module.exports = function ({model, moduleName}) {
             />
         </template>
         
-         <add-button @click="create"></add-button>
+         <add-button v-if="$store.getters.hasPermission('${model.name.toUpperCase()}_CREATE')" @click="create"></add-button>
       
         <${kebabCase(model.name)}-create v-if="creating" 
                         :open="creating"
@@ -87,15 +87,15 @@ module.exports = function ({model, moduleName}) {
             //On
             onItemCreated() {
                 this.$refs.list.fetch()
-                this.flash= "common.created"
+                this.flash= this.$t("common.created")
             },
             onItemUpdated() {
                 this.$refs.list.fetch()
-                this.flash= "common.updated"
+                this.flash= this.$t("common.updated")
             },
             onItemDeleted() {
                 this.$refs.list.fetch()
-                this.flash= "common.deleted"
+                this.flash= this.$t("common.deleted")
             },
             //Open
             create() {

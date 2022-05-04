@@ -59,8 +59,8 @@ module.exports = function ({model, moduleName}) {
 
             <template v-slot:item.action="{ item }">
                 <show-button  @click="$emit('show', item)" />
-                <edit-button  @click="$emit('update', item)" />
-                <delete-button @click="$emit('delete', item)" />
+                <edit-button v-if="$store.getters.hasPermission('${model.name.toUpperCase()}_UPDATE')"  @click="$emit('update', item)" />
+                <delete-button v-if="$store.getters.hasPermission('${model.name.toUpperCase()}_DELETE')" @click="$emit('delete', item)" />
             </template>
 
         </v-data-table>
@@ -172,7 +172,7 @@ function refProps(properties) {
     content += objIdListProps.map(field => {
         return `
          <template v-slot:item.${field.name}="{ item }">
-            {{item.${field.name}.map(e=> e.${field.refDisplayField}).join(", ")}}
+            {{item.${field.name} ? item.${field.name}.map(e=> e.${field.refDisplayField}).join(", ") : '' }}
          </template>
         `
     }).join('\n ')

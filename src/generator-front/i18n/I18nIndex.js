@@ -4,8 +4,13 @@ module.exports = function (source) {
 import merge from 'deepmerge'        
 ${getImportMessages(source.models)}
 
+${getImportPermissionMessages(source.models)}
+
+
 const messages = merge.all([
-    ${getModelMessages(source.models)}
+    ${getModelMessages(source.models)}, 
+    
+    ${getModelPermissionMessages(source.models)}
 ])
 
 export default messages;
@@ -19,8 +24,19 @@ function getImportMessages(models) {
     }).join("\n")
 }
 
+function getImportPermissionMessages(models) {
+    return models.map(model => {
+        return `import ${model.name + 'PermissionMessages'} from './permissions/${model.name + 'PermissionMessages'}'`
+    }).join("\n")
+}
+
 function getModelMessages(models) {
     return models.map(model => {
         return `${model.name}Messages`
+    }).join(",\n")
+}
+function getModelPermissionMessages(models) {
+    return models.map(model => {
+        return `${model.name}PermissionMessages`
     }).join(",\n")
 }

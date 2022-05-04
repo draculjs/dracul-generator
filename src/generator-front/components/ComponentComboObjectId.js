@@ -3,24 +3,30 @@ const getI18nKey = require('../../utils/getI18nKey')
 
 module.exports = function ({field, model, moduleName}) {
     let content =
-`<template>
-
-        <v-select
-                ${field.disabled ? 'disabled' : ''}
-                ${field.type == 'ObjectIdList' ? 'multiple' : ''}
+        `<template>
+        <v-autocomplete
                 prepend-icon="${field.icon ? field.icon : 'label'}"
                 :items="items"
                 :item-text="'${field.refDisplayField ? field.refDisplayField : 'name'}'"
-                :item-value="'id'"
+                :item-value="itemValue"
                 v-model="item"
-                :label="$t('${getI18nKey(moduleName,model.name,field.name,true)}')"
+                :label="$t('${getI18nKey(moduleName, model.name, field.name, true)}')"
                 :loading="loading"
                 :error="hasInputErrors('${field.name}')"
                 :error-messages="getInputErrors('${field.name}')"
                 color="secondary"
                 item-color="secondary"
-                ${field.required?':rules="required"':''}
-        ></v-select>
+                :rules="isRequired ? required : []"
+                :multiple="multiple"
+                :chips="chips"
+                :solo="solo"
+                :disabled="disabled"
+                :readonly="readonly"
+                :clearable="clearable"
+                :hide-details="hideDetails"
+                :style="{width: width, maxWidth: width}"
+                :return-object="returnObject"
+        ></v-autocomplete>
 
 </template>
 
@@ -35,9 +41,18 @@ module.exports = function ({field, model, moduleName}) {
         name: "${capitalize(field.ref)}Combobox",
         mixins: [InputErrorsByProps, RequiredRule],
         props:{
-            value: {
-               type: [String, Array]
-            },
+            value: {type: [String, Array]},
+            multiple: {type:Boolean, default: ${field.type == 'ObjectIdList' ? 'true' : 'false'} },
+            solo: {type:Boolean, default: false},
+            chips: {type:Boolean, default: false},
+            readonly: {type:Boolean, default:false},
+            disabled: {type:Boolean, default: ${field.disabled ? 'true' : 'false'}},
+            isRequired: {type:Boolean, default: ${field.required ? 'true' : 'false'} },
+            clearable: {type:Boolean, default: false},
+            hideDetails: {type: Boolean, default: false},
+            returnObject: {type: Boolean, default: false},
+            itemValue: {type: String, default: 'id'},
+            width: {type: String, default: null},
         },
         data() {
             return {
@@ -68,39 +83,36 @@ module.exports = function ({field, model, moduleName}) {
 
 <style scoped>
 
-</style>
+</style>`
 
-`
-
-return content
+    return content
 }
 
-function provider(field){
-    if(field.ref == 'User'){
+function provider(field) {
+    if (field.ref == 'User') {
         return `import {userProvider} from "@dracul/user-frontend"`
-    } else if(field.ref == 'Role'){
+    } else if (field.ref == 'Role') {
         return `import {roleProvider} from "@dracul/user-frontend"`
-    }
-    else{
-        return `import ${capitalize(field.ref)}Provider from "../../../../providers/${capitalize(field.ref)}Provider"`
+    } else {
+        return `import ${capitalize(field.ref)}Provider from "../../providers/${capitalize(field.ref)}Provider"`
     }
 }
 
 
-function fetchFunction(field){
-    if(field.ref == 'User'){
+function fetchFunction(field) {
+    if (field.ref == 'User') {
         return `this.loading= true
               userProvider.users().then(r => {
                     this.items = r.data.users
                 }).catch(err => console.error(err))
                 .finally(()=> this.loading = false)`
-    }else if(field.ref == 'Role'){
+    } else if (field.ref == 'Role') {
         return `this.loading= true
               roleProvider.roles().then(r => {
                     this.items = r.data.roles
                 }).catch(err => console.error(err))
                 .finally(()=> this.loading = false)`
-    }else{
+    } else {
         return `this.loading= true
                 ${capitalize(field.ref)}Provider.fetch${capitalize(field.ref)}().then(r => {
                     this.items = r.data.fetch${capitalize(field.ref)}

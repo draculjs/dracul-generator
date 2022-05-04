@@ -19,6 +19,15 @@ function getImportPages(models) {
 
 function getRoutesPages(models) {
     return models.map(model => {
-        return ` {name: '${model.name + 'Page'}', path: '/crud/${model.name.toLowerCase()}', component: ${model.name + 'Page'}}`
+        return `   
+     {
+        name: '${model.name + 'Page'}', 
+        path: '/crud/${model.name.toLowerCase()}', 
+        component: ${model.name + 'Page'},  
+        meta: {
+            requiresAuth: true,
+            permission: "${model.name.toUpperCase()}_MENU"
+        }
+     }`
     }).join(",\n")
 }

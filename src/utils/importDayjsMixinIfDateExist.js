@@ -6,7 +6,7 @@ module.exports = function importDayjsMixinIfDateExist(properties) {
         return false
     })
     if (propFilter.length > 0) {
-        return `import {DayjsMixin} from "@dracul/dayjs-frontend";`
+        return `import {DayjsMixin, DateInput} from "@dracul/dayjs-frontend";`
     }
     return ''
 }

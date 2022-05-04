@@ -1,6 +1,4 @@
 const capitalize = require('../../utils/capitalize')
-const descapitalize = require('../../utils/descapitalize')
-const pluralize = require('../../utils/pluralize')
 const getI18nKey = require('../../utils/getI18nKey')
 const enumOptionsArrayList = require('../../utils/enumOptionsArrayList')
 
@@ -21,6 +19,10 @@ module.exports = function ({field, model, moduleName}) {
                 color="secondary"
                 item-color="secondary"
                 ${field.required?':rules="required"':''}
+                :clearable="clearable"
+                :multiple="multiple"
+                :chips="chips"
+                :solo="solo"
         ></v-select>
 
 </template>
@@ -35,9 +37,11 @@ module.exports = function ({field, model, moduleName}) {
         name: "${capitalize(field.name)}Combobox",
         mixins: [InputErrorsByProps, RequiredRule],
         props:{
-            value: {
-               type: [String, Array]
-            },
+            value: {type: [String, Array]},
+            clearable: {type:Boolean, default: false},
+            multiple: {type:Boolean, default: false},
+            solo: {type:Boolean, default: false},
+            chips: {type:Boolean, default: false}
         },
         data() {
             return {

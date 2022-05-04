@@ -1,6 +1,7 @@
 const capitalize = require('./capitalize')
 const descapitalize = require('./descapitalize')
 const pluralize = require('./pluralize')
+const dateExist = require('./dateExist')
 
 module.exports.generateComboField = function (field, modelName, moduleName) {
     let content = `
@@ -39,7 +40,7 @@ module.exports.generateImportCombos = function generateImportCombos(properties) 
     let propFiltered = filterObjectIdProperties(properties);
 
     return propFiltered.map(field => {
-        return `import ${capitalize(field.ref)}Combobox from "./${capitalize(field.ref)}Combobox";`
+        return `import ${capitalize(field.ref)}Combobox from "../../../../components/${capitalize(field.ref)}Combobox";`
     }).join('\n')
 }
 
@@ -48,7 +49,7 @@ module.exports.generateImportCombosEnum = function generateImportCombos(properti
     let propFiltered = properties.filter(f => f.type == "Enum" || f.type == "EnumList");
 
     return propFiltered.map(field => {
-        return `import ${capitalize(field.name)}Combobox from "./${capitalize(field.name)}Combobox";`
+        return `import ${capitalize(field.name)}Combobox from "../../../../components/${capitalize(field.name)}Combobox";`
     }).join('\n')
 }
 
@@ -78,9 +79,11 @@ module.exports.generateImportComponent = function generateImportComponent(proper
     }).join(',\n')
 
     if (combos.length > 0) {
-        return "components: {" + combos + "," +getMultilang(properties) + "},"
+        return "components: {" + combos + "," +getMultilang(properties) + dateExist(properties) ? ', DateInput':'' + "},"
     }else if(getMultilang(properties)){
-        return "components: {" + getMultilang(properties) + "},"
+        return "components: {" + getMultilang(properties) + dateExist(properties) ? ', DateInput':'' + "},"
+    }else if(dateExist(properties)){
+        return "components: { DateInput },"
     }
 
 

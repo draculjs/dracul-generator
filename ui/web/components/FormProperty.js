@@ -21,7 +21,7 @@ Vue.component('FormProperty', {
     },
     data() {
         return {
-            options: ['String', 'StringList','Int', 'Float', 'Date', 'Datetime', 'Boolean', 'ObjectId', 'ObjectIdList', 'Enum', 'EnumList', 'Mixed', 'MultiLang'],
+            options: ['String', 'StringLarge','StringList','Int', 'Float', 'Date', 'Datetime', 'Boolean', 'ObjectId', 'ObjectIdList', 'Enum', 'EnumList', 'Mixed', 'MultiLang'],
             errors: [],
             form: {
                 name: this.p.name ? this.p.name : '',
