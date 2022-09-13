@@ -40,7 +40,20 @@ module.exports.generateImportCombos = function generateImportCombos(properties) 
     let propFiltered = filterObjectIdProperties(properties);
 
     return propFiltered.map(field => {
+
+        if(capitalize(field.ref) === 'User'){
+            return `    import {UserCombobox} from "@dracul/user-frontend";`
+        }
+        if(capitalize(field.ref) === 'Group'){
+            return `    import {GroupCombobox} from "@dracul/user-frontend";`
+        }
+
+        if(capitalize(field.ref) === 'Role'){
+            return `    import {RoleCombobox} from "@dracul/user-frontend";`
+        }
+
         return `import ${capitalize(field.ref)}Combobox from "../../../../components/${capitalize(field.ref)}Combobox";`
+
     }).join('\n')
 }
 
@@ -60,7 +73,7 @@ module.exports.generateImportComponent = function generateImportComponent(proper
         let propMultiLang = properties.filter(p => p.type == "MultiLang")
 
         if (propMultiLang.length > 0) {
-            return "MultiLangSubform"
+            return "MultiLangSubform,\n          "
         } else {
             return ""
         }
@@ -76,12 +89,12 @@ module.exports.generateImportComponent = function generateImportComponent(proper
         } else if (field.type == "StringList") {
             return 'ListCombobox'
         }
-    }).join(',\n')
+    }).join(',\n          ')
 
     if (combos.length > 0) {
-        return "components: {" + combos + "," +getMultilang(properties) + dateExist(properties) ? ', DateInput':'' + "},"
+        return "components: {\n          " + combos + ",\n" + getMultilang(properties) + (dateExist(properties) ? '          DateInput\n' : '' ) + "        },"
     }else if(getMultilang(properties)){
-        return "components: {" + getMultilang(properties) + dateExist(properties) ? ', DateInput':'' + "},"
+        return "components: {" + getMultilang(properties) + (dateExist(properties) ? ' DateInput' : '') + "},"
     }else if(dateExist(properties)){
         return "components: { DateInput },"
     }

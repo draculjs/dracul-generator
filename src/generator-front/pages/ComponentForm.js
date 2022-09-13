@@ -29,7 +29,7 @@ module.exports = function ({model, moduleName}) {
 
     export default {
         name: "${model.name}Form",
-        mixins: [InputErrorsByProps, RequiredRule ${dateExist(model.properties)?', DayjsMixin':''}   ],
+        mixins: [InputErrorsByProps, RequiredRule ${dateExist(model.properties) ?', DayjsMixin' : '' }   ],
         ${generateImportComponent(model.properties)}
         props:{
             value: {
