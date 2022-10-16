@@ -7,7 +7,7 @@ module.exports = function (model) {
 `import ${model.name} from './../models/${model.name}Model'
 import {UserInputError} from 'apollo-server-express'
 
-export const find${capitalize(model.name)} = async function (id) {
+export const find${capitalize(model.name)} =  function (id) {
     return new Promise((resolve, reject) => {
         ${model.name}.findOne({_id: id}).${populate(model.properties)}exec((err, doc) => {
             if(err) return reject(err)
@@ -17,7 +17,7 @@ export const find${capitalize(model.name)} = async function (id) {
     })
 }
 
-export const fetch${capitalize(model.name)} = async function () {
+export const fetch${capitalize(model.name)} =  function () {
     return new Promise((resolve, reject) => {
         ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec((err, docs) => {
             if(err) return reject(err)
@@ -107,7 +107,7 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
 
 ${findBy(model)}
 
-export const create${capitalize(model.name)} = async function (authUser, {${paramsFields(model.properties)}}) {
+export const create${capitalize(model.name)} =  function (authUser, {${paramsFields(model.properties)}}) {
     
     const doc = new ${model.name}({
         ${docFields(model.properties)}
@@ -128,7 +128,7 @@ export const create${capitalize(model.name)} = async function (authUser, {${para
     })
 }
 
-export const update${capitalize(model.name)} = async function (authUser, id, {${paramsFields(model.properties)}}) {
+export const update${capitalize(model.name)} =  function (authUser, id, {${paramsFields(model.properties)}}) {
     return new Promise((resolve, rejects) => {
         ${model.name}.findOneAndUpdate({_id: id},
         {${docFields(model.properties, true)}}, 
