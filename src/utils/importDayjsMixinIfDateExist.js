@@ -1,4 +1,4 @@
-module.exports = function importDayjsMixinIfDateExist(properties) {
+module.exports = function importDayjsMixinIfDateExist(properties, importDateInput) {
     let propFilter = properties.filter(field => {
         if (field.type == 'Date' || field.type == 'Datetime') {
             return true
@@ -6,7 +6,13 @@ module.exports = function importDayjsMixinIfDateExist(properties) {
         return false
     })
     if (propFilter.length > 0) {
-        return `import {DayjsMixin, DateInput} from "@dracul/dayjs-frontend";`
+
+        if(importDateInput){
+            return `import {DayjsMixin, DateInput} from "@dracul/dayjs-frontend";`
+        }else{
+            return `import {DayjsMixin} from "@dracul/dayjs-frontend";`
+        }
+
     }
     return ''
 }

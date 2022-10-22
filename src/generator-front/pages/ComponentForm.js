@@ -23,7 +23,7 @@ module.exports = function ({model, moduleName}) {
     
     ${generateImportCombos(model.properties)}
     ${generateImportCombosEnum(model.properties)}
-    ${importDayjsMixinIfDateExist(model.properties)}
+    ${importDayjsMixinIfDateExist(model.properties, true)}
 
     ${importMultiLangIfExist(model.properties)}
 
