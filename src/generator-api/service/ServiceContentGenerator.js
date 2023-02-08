@@ -107,57 +107,54 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
 
 ${findBy(model)}
 
-export const create${capitalize(model.name)} =  function (authUser, {${paramsFields(model.properties)}}) {
+export const create${capitalize(model.name)} =  async (authUser, {${paramsFields(model.properties)}}) => {
     
-    const doc = new ${model.name}({
-        ${docFields(model.properties)}
-    })
-    doc.id = doc._id;
-    return new Promise((resolve, rejects) => {
-        doc.save((error => {
-        
-            if (error) {
-                if (error.name == "ValidationError") {
-                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
-                }
-                return rejects(error)
-            }    
-        
-            ${resolvePopulate(model.properties)}
-        }))
-    })
+    try{
+    
+        const doc = new ${model.name}({
+                            ${docFields(model.properties)}
+                            })
+        doc.id = doc._id;
+    
+        await doc.save()
+        ${resolvePopulate(model.properties)}
+     
+        return doc
+    
+    }catch(error){
+        if (error.name == "ValidationError") {
+                 throw new UserInputError(error.message, {inputErrors: error.errors});
+        }
+        throw error
+    }
 }
 
-export const update${capitalize(model.name)} =  function (authUser, id, {${paramsFields(model.properties)}}) {
-    return new Promise((resolve, rejects) => {
-        ${model.name}.findOneAndUpdate({_id: id},
-        {${docFields(model.properties, true)}}, 
-        {new: true, runValidators: true, context: 'query'},
-        (error,doc) => {
-            
-            if (error) {
+export const update${capitalize(model.name)} =  async (authUser, id, {${paramsFields(model.properties)}}) => {
+
+        try{
+            const doc = ${model.name}.findOneAndUpdate({_id: id},
+                            {${docFields(model.properties, true)}}, 
+                            {new: true, runValidators: true, context: 'query'})
+                            
+            ${resolvePopulate(model.properties)}                
+            return doc
+        }catch(error){
                 if (error.name == "ValidationError") {
-                 return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
-                
+                 throw new UserInputError(error.message, {inputErrors: error.errors});
                 }
-                return rejects(error)
-                
-            } 
-        
-            ${resolvePopulate(model.properties)}
-        })
-    })
+            throw error
+        }    
 }
 
-export const delete${capitalize(model.name)} = function (id) {
-    return new Promise((resolve, rejects) => {
-        find${model.name}(id).then((doc) => {
-            doc.${model.softDelete?"softdelete":"delete"}( (err) => {
-                if(err) return reject(err)
-                resolve({id: id, success: true})
-            });
-        })
-    })
+export const delete${capitalize(model.name)} =  async (id) => {
+        try{
+        const doc = await find${model.name}(id)
+        await doc.${model.softDelete?"softdelete":"delete"}()
+        return {id: id, success: true}
+        }catch(error){
+            console.error(error)
+            throw error
+        }
 }
 
 `
@@ -203,11 +200,11 @@ function resolvePopulate(properties){
     properties = getObjectIdProperties(properties)
 
     if(properties.length > 0){
-        return 'doc.'+properties.map(field => {
+        return 'await doc.'+properties.map(field => {
             return `populate('${field.name}')`
-        }).join('.') + '.execPopulate(() => resolve(doc))'
+        }).join('.') + '.execPopulate()'
     }
-    return 'resolve(doc)'
+    return ''
 }
 
 
