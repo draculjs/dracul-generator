@@ -132,7 +132,7 @@ export const create${capitalize(model.name)} =  async (authUser, {${paramsFields
 export const update${capitalize(model.name)} =  async (authUser, id, {${paramsFields(model.properties)}}) => {
 
         try{
-            const doc = ${model.name}.findOneAndUpdate({_id: id},
+            const doc = await ${model.name}.findOneAndUpdate({_id: id},
                             {${docFields(model.properties, true)}}, 
                             {new: true, runValidators: true, context: 'query'})
                             
