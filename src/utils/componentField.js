@@ -131,9 +131,14 @@ function generateBooleanField(field, modelName, moduleName) {
 
 
 function generateComboField(field, modelName, moduleName) {
+    let suffix = 'combobox'
+    if(['User','Group'].includes(field.ref)){
+        suffix = 'autocomplete'
+    }
+
     let content = `
                    <v-col cols="12" sm="6">
-                        <${kebabCase(field.ref)}-combobox v-model="form.${field.name}" :input-errors="inputErrors" />
+                        <${kebabCase(field.ref)}-${suffix} v-model="form.${field.name}" :input-errors="inputErrors" />
                    </v-col>    
 `
     return content
@@ -155,9 +160,13 @@ function generateMultiLangField(field, modelName, moduleName) {
 }
 
 function generateComboListField(field, modelName, moduleName) {
+    let suffix = 'combobox'
+    if(['User','Group'].includes(field.ref)){
+        suffix = 'autocomplete'
+    }
     let content = `
                    <v-col cols="12" sm="6">
-                        <${kebabCase(field.ref)}-combobox v-model="form.${field.name}" :input-errors="inputErrors" />
+                        <${kebabCase(field.ref)}-${suffix} v-model="form.${field.name}" :input-errors="inputErrors" />
                    </v-col>    
 `
     return content

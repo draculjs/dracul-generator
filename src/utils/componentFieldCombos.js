@@ -42,10 +42,10 @@ module.exports.generateImportCombos = function generateImportCombos(properties) 
     return propFiltered.map(field => {
 
         if(capitalize(field.ref) === 'User'){
-            return `    import {UserCombobox} from "@dracul/user-frontend";`
+            return `    import {UserAutocomplete} from "@dracul/user-frontend";`
         }
         if(capitalize(field.ref) === 'Group'){
-            return `    import {GroupCombobox} from "@dracul/user-frontend";`
+            return `    import {GroupAutocomplete} from "@dracul/user-frontend";`
         }
 
         if(capitalize(field.ref) === 'Role'){
@@ -83,7 +83,12 @@ module.exports.generateImportComponent = function generateImportComponent(proper
 
     let combos = propFiltered.map(field => {
         if (field.type == "ObjectId" || field.type == "ObjectIdList") {
-            return `${capitalize(field.ref)}Combobox`
+            if(['User','Group'].includes(field.ref)){
+                return `${capitalize(field.ref)}Autocomplete`
+            }else{
+                return `${capitalize(field.ref)}Combobox`
+            }
+
         } else if (field.type == "Enum" || field.type == "EnumList") {
             return `${capitalize(field.name)}Combobox`
         } else if (field.type == "StringList") {
