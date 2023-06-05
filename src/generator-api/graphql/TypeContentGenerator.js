@@ -7,7 +7,7 @@ module.exports = function (model) {
 //TYPE DEFINITION
     let content =
         `
-${enumProps(model.properties)}        
+      
         
 type ${model.name}{
 id: ID!
@@ -103,9 +103,8 @@ function fields(properties, input = false) {
             case "Boolean":
                 return ` ${field.name}: Boolean${field.required ? "!" : ""}`
             case "Enum":
-                return ` ${field.name}: ${field.name}Enum${field.required ? "!" : ""}`
+                return ` ${field.name}: String${field.required ? "!" : ""}`
             case "EnumList":
-                return ` ${field.name}: [${field.name}Enum${field.required ? "!" : ""}]`
             case "StringList":
                 return ` ${field.name}: [String${field.required ? "!" : ""}]`
             case "StringLarge":

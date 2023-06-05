@@ -16,7 +16,6 @@ const ManagementRoutes = require("./routes/ManagementRoutes");
 const IndexRoute = require("./routes/IndexRoute");
 const Provider = require("./providers/Provider");
 const PageCrud = require("./pages/PageCrud");
-const ComponentCrud = require("./pages/ComponentCrud");
 const ComponentList = require("./pages/ComponentList");
 const ComponentForm = require("./pages/ComponentForm");
 const ComponentCreate = require("./pages/ComponentCreate");
@@ -221,16 +220,19 @@ class FrontGeneratorManager {
 
     PAGE_CRUD_FINALPATH(model) {
         if (model && model.name) {
-            return this.PAGES_CRUD_PATH() + model.name + 'Page/'
+            return this.PAGES_CRUD_PATH() + model.name + 'CrudPage/'
         }
         throw new Error("model.name is required")
     }
 
     generatePages() {
         this.source.models.forEach(model => {
-            createDir(this.PAGE_CRUD_FINALPATH(model))
-            let path = this.PAGE_CRUD_FINALPATH(model) + 'index.vue'
-            writeFile(path, PageCrud, model, 'Page')
+            let dirPath = this.PAGE_CRUD_FINALPATH(model)
+            createDir(dirPath)
+            let name = model.name + "CrudPage"
+            let path = this.PAGE_CRUD_FINALPATH(model) + name + '.vue'
+            writeFile(path, PageCrud, {model: model, moduleName: this.source.module}, 'Page')
+            writeIndex(dirPath, name)
         })
     }
 
@@ -367,17 +369,7 @@ class FrontGeneratorManager {
         })
     }
 
-    generateCrud() {
-        this.source.models.forEach(model => {
-            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Crud/'
-            createDir(dirPath)
-            let name = model.name + 'Crud'
-            let fileName = name + '.vue'
-            let filePath = dirPath + fileName
-            writeFile(filePath, ComponentCrud, {model: model, moduleName: this.source.module}, 'Crud')
-            writeIndex(dirPath, name)
-        })
-    }
+
 
 }
 
