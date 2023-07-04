@@ -52,6 +52,9 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
                     case 'eq':
                         qs[filter.field] = {...qs[filter.field], $eq: filter.value}
                         break;
+                    case 'in':
+                        qs[filter.field] = {...qs[filter.field], $in: ( Array.isArray(filter.value) ? filter.value : [filter.value])}
+                        break;    
                     case 'contain':
                     case 'regex':
                         qs[filter.field] = {...qs[filter.field], $regex: filter.value}

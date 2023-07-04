@@ -10,12 +10,16 @@ class ${model.name}Provider {
     find${capitalize(model.name)}(id) {
         return graphqlClient.query({
             query: require('./gql/${model.name}/find${capitalize(model.name)}.graphql'),
-            variables: {id:id}
+            variables: {id:id},
+            fetchPolicy: "network-only"
         })
     }
 
     fetch${capitalize(model.name)}() {
-        return graphqlClient.query({query: require('./gql/${model.name}/fetch${capitalize(model.name)}.graphql')})
+        return graphqlClient.query({
+        query: require('./gql/${model.name}/fetch${capitalize(model.name)}.graphql'),
+        fetchPolicy: "network-only"
+        })
     }
     
     paginate${capitalize(model.name)}(pageNumber, itemsPerPage, search = null, filters = null,  orderBy = null, orderDesc = false) {
