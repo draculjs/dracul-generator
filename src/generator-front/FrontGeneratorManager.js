@@ -79,6 +79,10 @@ class FrontGeneratorManager {
         return this.BASE_PATH() + '/components/'
     }
 
+    COMBOBOX_PATH() {
+        return this.BASE_PATH() + '/combobox/'
+    }
+
     PAGES_CRUD_PATH() {
         return this.BASE_PATH() + '/pages/crud/'
     }
@@ -252,7 +256,7 @@ class FrontGeneratorManager {
         this.source.models.forEach(model => {
             model.properties.forEach(field => {
                 if (field.type == 'ObjectId' || field.type == 'ObjectIdList') {
-                    let dirPath = this.COMPONENTS_PATH() + capitalize(field.ref) + 'Combobox/'
+                    let dirPath = this.COMBOBOX_PATH() + capitalize(field.ref) + 'Combobox/'
                     createDir(dirPath)
                     let name = capitalize(field.ref) + 'Combobox'
                     let fileName = name + '.vue'
@@ -272,7 +276,7 @@ class FrontGeneratorManager {
                 }
 
                 if (field.type == 'Enum' || field.type == 'EnumList') {
-                    let dirPath = this.COMPONENTS_PATH() + capitalize(field.name) + 'Combobox/'
+                    let dirPath = this.COMBOBOX_PATH() + capitalize(field.name) + 'Combobox/'
                     createDir(dirPath)
                     let name = capitalize(field.name) + 'Combobox'
                     let fileName = name + '.vue'
