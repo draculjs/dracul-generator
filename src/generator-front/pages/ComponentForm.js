@@ -54,6 +54,9 @@ module.exports = function ({model, moduleName}) {
         methods: {
             validate(){
               return this.$refs.form.validate()
+            },
+            save(){
+              this.$emit('save', this.form)
             }
         },
         data(){

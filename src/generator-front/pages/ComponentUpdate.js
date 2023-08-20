@@ -14,7 +14,7 @@ module.exports = function ({model,moduleName}) {
                  @update="update"
                  @close="$emit('close')"
     >
-         <${kebabCase(model.name)}-form ref="form" v-model="form" :input-errors="inputErrors" />
+         <${kebabCase(model.name)}-form ref="form" v-model="form" :input-errors="inputErrors" @save="update" />
     </crud-update>
 </template>
 
