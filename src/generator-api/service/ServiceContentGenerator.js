@@ -43,7 +43,7 @@ export const paginate${capitalize(model.name)} = function ( pageNumber = 1, item
         
            for(let filter of filters){
            
-                if(!filter.value){
+                if(!filter.value || filter.value.length === 0){
                     continue
                 }
                     

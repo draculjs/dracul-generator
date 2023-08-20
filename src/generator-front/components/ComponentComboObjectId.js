@@ -7,7 +7,7 @@ module.exports = function ({field, model, moduleName}) {
         <v-autocomplete
                 prepend-icon="${field.icon ? field.icon : 'label'}"
                 :items="items"
-                :item-text="'${field.refDisplayField ? field.refDisplayField : 'name'}'"
+                :item-text="itemText"
                 :item-value="itemValue"
                 v-model="item"
                 :label="$t('${getI18nKey(moduleName, model.name, field.name, true)}')"
@@ -41,7 +41,7 @@ module.exports = function ({field, model, moduleName}) {
         name: "${capitalize(field.ref)}Combobox",
         mixins: [InputErrorsByProps, RequiredRule],
         props:{
-            value: {type: [String, Array]},
+            value: {type: [String, Array, Object]},
             multiple: {type:Boolean, default: ${field.type == 'ObjectIdList' ? 'true' : 'false'} },
             solo: {type:Boolean, default: false},
             chips: {type:Boolean, default: false},
@@ -52,6 +52,7 @@ module.exports = function ({field, model, moduleName}) {
             hideDetails: {type: Boolean, default: false},
             returnObject: {type: Boolean, default: false},
             itemValue: {type: String, default: 'id'},
+            itemText: {type: String, default: '${field.refDisplayField ? field.refDisplayField : 'name'}'},
             width: {type: String, default: null},
         },
         data() {
