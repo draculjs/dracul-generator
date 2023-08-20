@@ -52,7 +52,7 @@ module.exports.generateImportCombos = function generateImportCombos(properties) 
             return `    import {RoleCombobox} from "@dracul/user-frontend";`
         }
 
-        return `import ${capitalize(field.ref)}Combobox from "../../../../components/${capitalize(field.ref)}Combobox";`
+        return `import ${capitalize(field.ref)}Combobox from "../../../../combobox/${capitalize(field.ref)}Combobox";`
 
     }).join('\n')
 }
@@ -62,7 +62,7 @@ module.exports.generateImportCombosEnum = function generateImportCombos(properti
     let propFiltered = properties.filter(f => f.type == "Enum" || f.type == "EnumList");
 
     return propFiltered.map(field => {
-        return `import ${capitalize(field.name)}Combobox from "../../../../components/${capitalize(field.name)}Combobox";`
+        return `import ${capitalize(field.name)}Combobox from "../../../../combobox/${capitalize(field.name)}Combobox";`
     }).join('\n')
 }
 
