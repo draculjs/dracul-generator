@@ -40,6 +40,9 @@ function fields(properties) {
             case "ObjectId":
                 if(!field.ref) throw new Error("Field " + field.name + "  has ObjectId type so needs ref atributte")
                 return ` ${field.name}: {type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}", required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}`
+            case "ObjectIdRel":
+                if(!field.ref) throw new Error("Field " + field.name + "  has ObjectId type so needs ref atributte")
+                return ` ${field.name}: { rel: {type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}", required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}, ${field.refDisplayField}: {type: String, required: false, index: false, unique: false }  }`
             case "ObjectIdList":
                 if(!field.ref) throw new Error("Field " + field.name + "  has ObjectIdList type so needs ref atributte")
                 return ` ${field.name}: [{type: mongoose.Schema.Types.ObjectId, ref: "${field.ref}",required: ${field.required}, unique: ${(field.unique === true)?true:false}, index: ${(field.unique === true)?true:false}}]`

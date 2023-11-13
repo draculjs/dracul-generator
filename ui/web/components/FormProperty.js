@@ -21,7 +21,7 @@ Vue.component('FormProperty', {
     },
     data() {
         return {
-            options: ['String', 'StringLarge','StringList','Int', 'Float', 'Date', 'Datetime', 'Boolean', 'ObjectId', 'ObjectIdList', 'Enum', 'EnumList', 'Mixed', 'MultiLang'],
+            options: ['String', 'StringLarge','StringList','Int', 'Float', 'Date', 'Datetime', 'Boolean', 'ObjectId', 'ObjectIdRel', 'ObjectIdList', 'Enum', 'EnumList', 'Mixed', 'MultiLang'],
             errors: [],
             form: {
                 name: this.p.name ? this.p.name : '',
@@ -106,11 +106,11 @@ Vue.component('FormProperty', {
         <input-select :options="options" label="type" name="type" v-model="form.type" :errors="errors"></input-select>
     </div>
     
-    <div class="col-12 py-1" v-if="form.type =='ObjectId' || form.type =='ObjectIdList'">
+    <div class="col-12 py-1" v-if="form.type =='ObjectId' || form.type =='ObjectIdRel' || form.type =='ObjectIdList'">
         <input-text  label="Ref" name="ref" v-model="form.ref" :errors="errors"></input-text>
     </div>
     
-      <div class="col-12 py-1" v-if="form.type =='ObjectId' || form.type =='ObjectIdList'">
+      <div class="col-12 py-1" v-if="form.type =='ObjectId' || form.type =='ObjectIdRel' || form.type =='ObjectIdList'">
         <input-text  label="RefDisplayField" name="refDisplayField" v-model="form.refDisplayField" :errors="errors"></input-text>
     </div>
     

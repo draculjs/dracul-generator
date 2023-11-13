@@ -7,7 +7,7 @@ module.exports = function (model) {
 //TYPE DEFINITION
     let content =
         `
-      
+${fieldsRel(model.properties)}
         
 type ${model.name}{
 id: ID!
@@ -48,32 +48,50 @@ type Mutation {
     return content
 }
 
-function findBy(model){
+function findBy(model) {
     let properties = model.properties.filter(field => field.findby == true)
 
     return properties.map(field => {
-        return findByMethod(model,field)
+        return findByMethod(model, field)
     }).join('\n')
 }
 
-function findByMethod(model, field){
+function findByMethod(model, field) {
     let content = `${descapitalize(model.name)}By${capitalize(field.name)}(${field.name}:String!):[${model.name}]`
     return content
 }
 
-function enumProps(properties){
+function enumProps(properties) {
 
     let enumProps = properties.filter(prop => prop.type == "Enum" || prop.type == "EnumList")
     return enumProps.map(field => {
-    return `enum ${field.name}Enum{
+        return `enum ${field.name}Enum{
         ${enumStringToArray(field.enumOptions).join(",\n")}
     }`
     }).join('\n')
 }
 
+function fieldsRel(properties, input = false) {
+
+    if (input) {
+        properties = filterBackendProperties(properties)
+    }
+
+    properties = properties.filter(prop => prop.type == "ObjectIdRel")
+
+    return properties.map(field => {
+        return `type ${field.ref}Rel {
+            rel: ${field.ref}${field.required ? "!" : ""}
+            ${field.refDisplayField}: String${field.required ? "!" : ""}
+        }`
+
+    }).join('\n')
+
+}
+
 function fields(properties, input = false) {
 
-    if(input){
+    if (input) {
         properties = filterBackendProperties(properties)
     }
 
@@ -89,6 +107,14 @@ function fields(properties, input = false) {
                 }
 
                 return ` ${field.name}: ${field.ref}${field.required ? "!" : ""}`
+            case "ObjectIdRel":
+                if (!field.ref) throw new Error("Field " + field.name + "  has ObjectIdRel type so needs ref atributte")
+
+                if (input) {
+                    return ` ${field.name}: ID${field.required ? "!" : ""}`
+                }
+
+                return ` ${field.name}: ${field.ref}Rel${field.required ? "!" : ""}`
             case "ObjectIdList":
                 if (!field.ref) throw new Error("Field " + field.name + "  has ObjectIdList type so needs ref atributte")
 
