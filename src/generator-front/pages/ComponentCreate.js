@@ -24,7 +24,7 @@ module.exports = function ({model,moduleName}) {
     
     import {CrudCreate, ClientError} from '@dracul/common-frontend'
     
-    import ${model.name}Form from "../${model.name}Form";
+    import ${model.name}Form from "../../../../forms/${model.name}Form";
     
     
 

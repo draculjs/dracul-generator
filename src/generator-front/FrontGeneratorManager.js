@@ -87,6 +87,10 @@ class FrontGeneratorManager {
         return this.BASE_PATH() + '/pages/crud/'
     }
 
+    FORM_PATH() {
+        return this.BASE_PATH() + '/forms/'
+    }
+
     PROVIDERS_PATH() {
         return this.BASE_PATH() + '/providers/'
     }
@@ -103,6 +107,7 @@ class FrontGeneratorManager {
         createDir(this.I18N_PERMISSION_MESSAGES_PATH())
         createDir(this.ROUTES_PATH())
         createDir(this.PAGES_PATH())
+        createDir(this.FORM_PATH())
         createDir(this.COMPONENTS_PATH())
         createDir(this.PAGES_CRUD_PATH())
         createDir(this.PROVIDERS_PATH())
@@ -229,6 +234,14 @@ class FrontGeneratorManager {
         throw new Error("model.name is required")
     }
 
+    FORM_FINALPATH(model) {
+        if (model && model.name) {
+            return this.FORM_PATH() + model.name + 'CrudPage/'
+        }
+        throw new Error("model.name is required")
+    }
+
+
     generatePages() {
         this.source.models.forEach(model => {
             let dirPath = this.PAGE_CRUD_FINALPATH(model)
@@ -242,7 +255,7 @@ class FrontGeneratorManager {
 
     generateForm() {
         this.source.models.forEach(model => {
-            let dirPath = this.PAGE_CRUD_FINALPATH(model) + model.name + 'Form/'
+            let dirPath = this.FORM_PATH() + model.name + 'Form/'
             createDir(dirPath)
             let name = model.name + 'Form'
             let fileName = name + '.vue'

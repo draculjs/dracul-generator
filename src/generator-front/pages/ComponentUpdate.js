@@ -24,7 +24,7 @@ module.exports = function ({model,moduleName}) {
     
     import {CrudUpdate, ClientError} from '@dracul/common-frontend'
     
-    import ${model.name}Form from "../${model.name}Form";
+    import ${model.name}Form from "../../../../forms/${model.name}Form";
   
     ${importDayjsIfDateExist(model.properties)}
 
