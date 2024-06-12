@@ -7,24 +7,24 @@ module.exports = function (model) {
 `import ${model.name} from './../models/${model.name}Model'
 import {UserInputError} from 'apollo-server-express'
 
-export const find${capitalize(model.name)} =  function (id) {
-    return new Promise((resolve, reject) => {
-        ${model.name}.findOne({_id: id}).${populate(model.properties)}exec((err, doc) => {
-            if(err) return reject(err)
-             
-            resolve(doc)
-        })
-    })
+export const find${capitalize(model.name)} =  async function (id) {
+    try{
+        const doc = await ${model.name}.findOne({_id: id}).${populate(model.properties)}exec()
+        return doc
+    catch(e){
+        throw e
+    }
 }
 
-export const fetch${capitalize(model.name)} =  function () {
-    return new Promise((resolve, reject) => {
-        ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec((err, docs) => {
-            if(err) return reject(err)
-             
-            resolve(docs)
-        });
-    })
+export const fetch${capitalize(model.name)} =  async function () {
+
+    try{
+        const doc = await ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec()
+        return doc
+    catch(e){
+        throw e
+    }
+
 }
 
 export const paginate${capitalize(model.name)} = function ( pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
@@ -142,18 +142,18 @@ export const update${capitalize(model.name)} =  async (authUser, id, {${paramsFi
             ${resolvePopulate(model.properties)}                
             return doc
         }catch(error){
-                if (error.name == "ValidationError") {
-                 throw new UserInputError(error.message, {inputErrors: error.errors});
-                }
+            if (error.name == "ValidationError") {
+            throw new UserInputError(error.message, {inputErrors: error.errors});
+            }
             throw error
         }    
 }
 
 export const delete${capitalize(model.name)} =  async (id) => {
         try{
-        const doc = await find${model.name}(id)
-        await doc.${model.softDelete?"softdelete":"delete"}()
-        return {id: id, success: true}
+            const doc = await find${model.name}(id)
+            await doc.${model.softDelete?"softdelete":"delete"}()
+            return {id: id, success: true}
         }catch(error){
             console.error(error)
             throw error
@@ -179,11 +179,14 @@ function findByMethod(model, field){
     let content =
 `
 export const find${capitalize(model.name)}By${capitalize(field.name)} = async function (${field.name}) {
-    return new Promise((resolve, reject) => {
-        ${model.name}.find({${field.name}: ${field.name}}).${populate(model.properties)}exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
-    })
+
+    try{
+        const doc = await ${model.name}.find({${field.name}: ${field.name}}).${populate(model.properties)}exec()
+        return doc
+    catch(e){
+        throw e
+    }
+
 }
 `
     return content
