@@ -11,7 +11,7 @@ export const find${capitalize(model.name)} =  async function (id) {
     try{
         const doc = await ${model.name}.findOne({_id: id}).${populate(model.properties)}exec()
         return doc
-    catch(e){
+    }catch(e){
         throw e
     }
 }
@@ -21,7 +21,7 @@ export const fetch${capitalize(model.name)} =  async function () {
     try{
         const doc = await ${model.name}.find({})${model.softDelete?".isDeleted(false)":""}.${populate(model.properties)}exec()
         return doc
-    catch(e){
+    }catch(e){
         throw e
     }
 
